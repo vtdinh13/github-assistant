@@ -81,4 +81,4 @@ chunks_list = create_chunks(repo_docs)
     ```
     
     The above results in the following JSON output:
-    [](json-example-output.png)
+    ![](json-example-output.png)
