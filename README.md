@@ -36,7 +36,7 @@ uv init
 
 # Step 1 : Ingesting
 
-- Download and unzip a GitHub repository in the form of a zip file
+- Download and unzip a GitHub repository
 - Select `.md` and `.mdx` files only
 - You can download the Elastic Search repository either on the command line or in a Jupyter notebook, and the repository will be downloaded to your working directory.
 
