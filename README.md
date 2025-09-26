@@ -34,7 +34,7 @@ pip install uv
 uv init
 ```
 
-# Step 1 : Ingestion
+# Step 1 : Ingesting
 
 - Download and unzip a GitHub repository in the form of a zip file
 - Select `.md` and `.mdx` files only
@@ -55,7 +55,7 @@ read_repo_data(repo_owner='elastic', repo_name='elasticsearch')
 
 # Step 2 : Processing
 
-- Depending on the kind of data, there are various ways of processing the data.
+- Processing methods vary based on dataset size:
     - Simple overlapping chunks, paragraph and section splitting, token-based, or AI-powered splitting using some LLM
     - Overlapping lexical split is one of the simplest methods and is often sufficient. It is recommended to try the simplest approach first before moving to a more complex method such as using a LLM.
 - A sliding window method, or overlapping between chucks, was used to create a list of chunks for this project. To implement the processing step:
