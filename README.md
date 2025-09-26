@@ -76,7 +76,7 @@ chunks_list = create_chunks(repo_docs)
     ```python
     from search import vector_search
     
-    query = 'What is elastic net?'
+    query = 'What is elastic search?'
     vector_search(chunks_list, query)
     ```
     
