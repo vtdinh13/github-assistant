@@ -2,9 +2,20 @@ import io
 import zipfile
 import requests
 import frontmatter
-import argparse
-import pickle
+# import argparse
+# import pickle
+
+
+from minsearch import VectorSearch
+from sentence_transformers import SentenceTransformer
 from tqdm.auto import tqdm
+import numpy as np
+
+
+embedding_model = SentenceTransformer('multi-qa-distilbert-cos-v1')
+v_index = VectorSearch(keyword_fields = [])
+
+
 
 def read_repo_data(repo_owner:str, repo_name:str) -> list:
     """
@@ -48,19 +59,84 @@ def read_repo_data(repo_owner:str, repo_name:str) -> list:
     zf.close()
 
     
-    with open('git_repo_data.pkl', 'wb') as f:
-        pickle.dump(repository_data, f)
+    # with open('git_repo_data.pkl', 'wb') as f:
+    #     pickle.dump(repository_data, f)
     return repository_data   
 
-def main(params):
-    repo_owner = params.repo_owner
-    repo_name = params.repo_name
-    read_repo_data(repo_owner, repo_name)
+def sliding_window(seq, size, step):
+    if size <= 0 or step <= 0:
+        raise ValueError("size and step must be positive")
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Ingest git repo and save data as a pickle file in current working directory')
-    parser.add_argument('--repo_owner', help='user id of repository owner')
-    parser.add_argument('--repo_name', help='name of repository')
+    n = len(seq)
+    result = []
+    for i in range(0, n, step):
+        chunk = seq[i:i+size]
+        result.append({'start': i, 'chunk': chunk})
+        if i + size >= n:
+            break
 
-    args = parser.parse_args()
-    main(args)
+    return result
+
+def chunk_documents(docs:list, size=2000, step=1000):
+    doc_chunks = []
+
+    for doc in docs:
+        doc_copy = doc.copy()
+        doc_content = doc_copy.pop('content')
+        chunks = sliding_window(doc_content, size, step)
+        for chunk in chunks:
+            chunk.update(doc_copy)
+        doc_chunks.extend(chunks)
+    return doc_chunks
+
+
+
+def create_doc_embeddings(chunks:list):
+    embeddings = []
+
+    for d in tqdm(chunks):
+        v = embedding_model.encode(d['chunk'])
+        embeddings.append(v)
+
+    return np.array(embeddings)
+
+
+def create_vector_index(chunks:list):
+    emb_array = create_doc_embeddings(chunks)
+    return v_index.fit(emb_array, chunks)
+
+
+
+def text_embedding_search(query:str):
+    query_embedding = embedding_model.encode(query)
+    return v_index.search(query_embedding, num_results=5)
+
+def index_data(repo_owner, repo_name, filter=None, chunk=False, chunking_params=None):
+    docs = read_repo_data(repo_owner, repo_name)
+
+    if filter is not None:
+        docs = [doc for doc in docs if filter(doc)]
+    
+    if chunk:
+        if chunking_params is None:
+            chunking_params = {'size': 2000, 'step': 1000}
+        docs = chunk_documents(docs, **chunking_params)
+    
+    vector_index = create_vector_index(docs)
+    return vector_index
+    
+
+
+
+# def main(params):
+#     repo_owner = params.repo_owner
+#     repo_name = params.repo_name
+#     read_repo_data(repo_owner, repo_name)
+
+# if __name__ == '__main__':
+#     parser = argparse.ArgumentParser(description='Ingest git repo and save data as a pickle file in current working directory')
+#     parser.add_argument('--repo_owner', help='user id of repository owner')
+#     parser.add_argument('--repo_name', help='name of repository')
+
+#     args = parser.parse_args()
+#     main(args)
