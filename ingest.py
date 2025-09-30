@@ -2,8 +2,6 @@ import io
 import zipfile
 import requests
 import frontmatter
-# import argparse
-# import pickle
 
 
 from minsearch import VectorSearch
@@ -59,8 +57,6 @@ def read_repo_data(repo_owner:str, repo_name:str) -> list:
     zf.close()
 
     
-    # with open('git_repo_data.pkl', 'wb') as f:
-    #     pickle.dump(repository_data, f)
     return repository_data   
 
 def sliding_window(seq, size, step):
@@ -125,18 +121,3 @@ def index_data(repo_owner, repo_name, filter=None, chunk=False, chunking_params=
     vector_index = create_vector_index(docs)
     return vector_index
     
-
-
-
-# def main(params):
-#     repo_owner = params.repo_owner
-#     repo_name = params.repo_name
-#     read_repo_data(repo_owner, repo_name)
-
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser(description='Ingest git repo and save data as a pickle file in current working directory')
-#     parser.add_argument('--repo_owner', help='user id of repository owner')
-#     parser.add_argument('--repo_name', help='name of repository')
-
-#     args = parser.parse_args()
-#     main(args)
