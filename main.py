@@ -8,7 +8,7 @@ import asyncio
 
 
 def initialize_index(repo_owner:str, repo_name:str):
-    print(f"Starting AI FAQ Assistant for {repo_owner}/{repo_name}")
+    print(f"Starting AI Assistant for {repo_owner}/{repo_name}")
     print("Initializing data ingestion...")
 
     def filter(doc):
