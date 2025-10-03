@@ -18,16 +18,17 @@ Format: [LINK TITLE](FULL_GITHUB_LINK)
 If the search doesn't return relevant results, let the user know and provide general guidance.
 """
 
-def init_agent(index, repo_owner, repo_name):
+def init_agent(index, repo_owner, repo_name, agent_name='es_agent'):
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(repo_owner=repo_owner, repo_name=repo_name)
 
     search_tool = search_tools.SearchTool(index=index)
 
     agent = Agent(
-        name="es_agent",
+        name=agent_name,
         instructions=system_prompt,
         tools=[search_tool.search],
         model='gpt-4o-mini'
     )
 
     return agent
+
