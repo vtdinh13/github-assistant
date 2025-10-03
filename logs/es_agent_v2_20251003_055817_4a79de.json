@@ -1,0 +1,132 @@
+{
+  "agent_name": "es_agent_v2",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "How does the `error_distance` parameter affect the outcome of the circle conversion process?",
+          "timestamp": "2025-10-03T05:58:15.578946+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\":\"error_distance circle conversion process\"}",
+          "tool_call_id": "call_6k4OG7c7guAKTNFRjOlFtmHI",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 218,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 17,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T05:58:15+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CMT5zIRyfGf9e7FYnSMekAJliGalt",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [
+            {
+              "navigation_title": "Circle",
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest-circle-processor.html"
+              ],
+              "content": "# Circle processor [ingest-circle-processor]\n\n\nConverts circle definitions of shapes to regular polygons which approximate them.\n\n$$$circle-processor-options$$$\n\n| Name | Required | Default | Description |\n| --- | --- | --- | --- |\n| `field` | yes | - | The field to interpret as a circle. Either a string in WKT format or a map for GeoJSON. |\n| `target_field` | no | `field` | The field to assign the polygon shape to, by default `field` is updated in-place |\n| `ignore_missing` | no | `false` | If `true` and `field` does not exist, the processor quietly exits without modifying the document |\n| `error_distance` | yes | - | The difference between the resulting inscribed distance from center to side and the circle\u2019s radius (measured in meters for `geo_shape`, unit-less for `shape`) |\n| `shape_type` | yes | - | Which field mapping type is to be used when processing the circle: `geo_shape` or `shape` |\n| `description` | no | - | Description of the processor. Useful for describing the purpose of the processor or its configuration. |\n| `if` | no | - | Conditionally execute the processor. See [Conditionally run a processor](docs-content://manage-data/ingest/transform-enrich/ingest-pipelines.md#conditionally-run-processor). |\n| `ignore_failure` | no | `false` | Ignore failures for the processor. See [Handling pipeline failures](docs-content://manage-data/ingest/transform-enrich/ingest-pipelines.md#handling-pipeline-failures). |\n| `on_failure` | no | - | Handle failures for the processor. See [Handling pipeline failures](docs-content://manage-data/ingest/transform-enrich/ingest-pipelines.md#handling-pipeline-failures). |\n| `tag` | no | - | Identifier for the processor. Useful for debugging and metrics. |\n\n![error distance](images/error_distance.png \"\")\n\n```console\nPUT circles\n{\n  \"mappings\": {\n    \"properties\": {\n      \"circle\": {\n        \"type\": \"geo_shape\"\n      }\n    }\n  }\n}\n\nPUT _ingest/pipeline/polygonize_circles\n{\n  \"description\": \"translate circle to polygon\",\n  \"processors\": [\n    {\n      \"circle\": {\n        \"field\": \"circle\",\n        \"error_distance\": 28.0,\n        \"shape_type\": \"geo_shape\"\n      }\n    }\n  ]\n}\n```\n\nUsing the above pipeline, we can attempt to index a document into the `circles` index. The circle can be represented as either a WKT circle or a GeoJSON circle. The resulting polygon will be represented and indexed using the same format as the input circle. WKT will be translated to a WKT polygon, and GeoJSON circles will be translated to GeoJSON polygons.\n\n::::{important}\nCircles that contain a pole are not supported.\n::::\n\n\n## Example: Circle defined in Well Known Text [_example_circle_defined_in_well_known_text]\n\nIn this example a circle defined in WKT format is indexed\n\n```console\nPUT circles/_doc/1?pipeline=polygonize_circles\n{\n  \"circle\": \"CIRCLE (30 10 40)\"\n}\n\nGET circles/_doc/1\n```\n\nThe response from the above index request:\n\n```console-result\n{\n  \"found\": true,\n  \"_index\": \"circles\",\n  \"_id\": \"1\",\n  \"_version\": 1,\n  \"_seq_no\": 22,\n  \"_primary_term\": 1,\n  \"_source\": {\n    \"circle\": \"POLYGON ((30.000365257263184 10.0, 30.000111397193788 10.00034284530941, 29.999706043744222 10.000213571721195, 29.999706043744222 9.999786428278805, 30.000111397193788 9.99965715469059, 30.000365257263184 10.0))\"\n  }\n}\n```\n\n\n## Example: Circle defined in GeoJSON [_example_circle_defined_in_geojson]\n\nIn this example a circle defined in GeoJSON format is indexed\n\n```console\nPUT circles/_doc/2?pipeline=polygonize_circles\n{\n  \"circle\": {\n    \"type\": \"circle\",\n    \"radius\": \"40m\",\n    \"coordinates\": [30, 10]\n  }\n}\n\nGET circles/_doc/2\n```\n\nThe response from the above index request:\n\n```console-result\n{\n  \"found\": true,\n  \"_index\": \"circles\",\n  \"_id\": \"2\",\n  \"_version\": 1,\n  \"_seq_no\": 22,\n  \"_primary_term\": 1,\n  \"_source\": {\n    \"circle\": {\n      \"coordinates\": [\n        [\n          [30.000365257263184, 10.0],\n          [30.000111397193788, 10.00034284530941],\n          [29.999706043744222, 10.000213571721195],\n          [29.999706043744222, 9.999786428278805],\n          [30.000111397193788, 9.99965715469059],\n          [30.000365257263184, 10.0]\n        ]\n      ],\n      \"type\": \"Polygon\"\n    }\n  }\n}\n```\n\n\n## Notes on Accuracy [circle-processor-notes]\n\nAccuracy of the polygon that represents the circle is defined as `error_distance`. The smaller this difference is, the closer to a perfect circle the polygon is.\n\nBelow is a table that aims to help capture how the radius of the circle affects the resulting number of sides of the polygon given different inputs.\n\nThe minimum number of sides is `4` and the maximum is `1000`.\n\n$$$circle-processor-accuracy$$$\n\n| error_distance | radius in meters | number of sides of polygon |\n| --- | --- | --- |\n| 1.00 | 1.0 | 4 |\n| 1.00 | 10.0 | 14 |\n| 1.00 | 100.0 | 45 |\n| 1.00 | 1000.0 | 141 |\n| 1.00 | 10000.0 | 445 |\n| 1.00 | 100000.0 | 1000 |",
+              "filename": "elasticsearch-main/docs/reference/enrich-processor/ingest-circle-processor.md"
+            },
+            {
+              "content": "% This is generated by ESQL's AbstractFunctionTestCase. Do not edit it. See ../README.md for how to regenerate it.\n\n**Description**\n\nReturns [Pi](https://en.wikipedia.org/wiki/Pi), the ratio of a circle\u2019s circumference to its diameter.",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/functions/description/pi.md"
+            },
+            {
+              "content": "% This is generated by ESQL's AbstractFunctionTestCase. Do not edit it. See ../README.md for how to regenerate it.\n\n**Description**\n\nReturns the [ratio](https://tauday.com/tau-manifesto) of a circle\u2019s circumference to its radius.",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/functions/description/tau.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/sql-functions-string.html"
+              ],
+              "content": "# String functions [sql-functions-string]\n\nFunctions for performing string manipulation.\n\n## `ASCII` [sql-functions-string-ascii]\n\n```sql\nASCII(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the ASCII code value of the leftmost character of `string_exp` as an integer.\n\n```sql\nSELECT ASCII('Elastic');\n\nASCII('Elastic')\n----------------\n69\n```\n\n\n## `BIT_LENGTH` [sql-functions-string-bit-length]\n\n```sql\nBIT_LENGTH(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the length in bits of the `string_exp` input expression.\n\n```sql\nSELECT BIT_LENGTH('Elastic');\n\nBIT_LENGTH('Elastic')\n---------------------\n56\n```\n\n\n## `CHAR` [sql-functions-string-char]\n\n```sql\nCHAR(code) <1>\n```\n\n**Input**:\n\n1. integer expression between `0` and `255`. If `null`, negative, or greater than `255`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns the character that has the ASCII code value specified by the numeric input.\n\n```sql\nSELECT CHAR(69);\n\n   CHAR(69)\n---------------\nE\n```\n\n\n## `CHAR_LENGTH` [sql-functions-string-char-length]\n\n```sql\nCHAR_LENGTH(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the length in characters of the input, if the string expression is of a character data type; otherwise, returns the length in bytes of the string expression (the smallest integer not less than the number of bits divided by 8).\n\n```sql\nSELECT CHAR_LENGTH('Elastic');\n\nCHAR_LENGTH('Elastic')\n----------------------\n7\n```\n\n\n## `CONCAT` [sql-functions-string-concat]\n\n```sql\nCONCAT(\n    string_exp1, <1>\n    string_exp2) <2>\n```\n\n**Input**:\n\n1. string expression. Treats `null` as an empty string.\n2. string expression. Treats `null` as an empty string.\n\n\n**Output**: string\n\n**Description**: Returns a character string that is the result of concatenating `string_exp1` to `string_exp2`.\n\nThe resulting string cannot exceed a byte length of 1 MB.\n\n```sql\nSELECT CONCAT('Elasticsearch', ' SQL');\n\nCONCAT('Elasticsearch', ' SQL')\n-------------------------------\nElasticsearch SQL\n```\n\n\n## `INSERT` [sql-functions-string-insert]\n\n```sql\nINSERT(\n    source,      <1>\n    start,       <2>\n    length,      <3>\n    replacement) <4>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. integer expression. If `null`, the function returns `null`.\n3. integer expression. If `null`, the function returns `null`.\n4. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a string where `length` characters have been deleted from `source`, beginning at `start`, and where `replacement` has been inserted into `source`, beginning at `start`.\n\nThe resulting string cannot exceed a byte length of 1 MB.\n\n```sql\nSELECT INSERT('Elastic ', 8, 1, 'search');\n\nINSERT('Elastic ', 8, 1, 'search')\n----------------------------------\nElasticsearch\n```\n\n\n## `LCASE` [sql-functions-string-lcase]\n\n```sql\nLCASE(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a string equal to that in `string_exp`, with all uppercase characters converted to lowercase.\n\n```sql\nSELECT LCASE('Elastic');\n\nLCASE('Elastic')\n----------------\nelastic\n```\n\n\n## `LEFT` [sql-functions-string-left]\n\n```sql\nLEFT(\n    string_exp, <1>\n    count)      <2>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. integer expression. If `null`, the function returns `null`. If `0` or negative, the function returns an empty string.\n\n\n**Output**: string\n\n**Description**: Returns the leftmost count characters of `string_exp`.\n\n```sql\nSELECT LEFT('Elastic',3);\n\nLEFT('Elastic',3)\n-----------------\nEla\n```\n\n\n## `LENGTH` [sql-functions-string-length]\n\n```sql\nLENGTH(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the number of characters in `string_exp`, excluding trailing blanks.\n\n```sql\nSELECT LENGTH('Elastic   ');\n\nLENGTH('Elastic   ')\n--------------------\n7\n```\n\n\n## `LOCATE` [sql-functions-string-locate]\n\n```sql\nLOCATE(\n    pattern, <1>\n    source   <2>\n    [, start]<3>\n)\n```\n\n**Input**:\n\n1. string expression.  If `null`, the function returns `null`.\n2. string expression.  If `null`, the function returns `null`.\n3. integer expression; optional. If `null`, `0`, `1`, negative, or not specified, the search starts at the first character position.\n\n\n**Output**: integer\n\n**Description**: Returns the starting position of the first occurrence of `pattern` within `source`. The optional `start` specifies the character position to start the search with. If the `pattern` is not found within `source`, the function returns `0`.\n\n```sql\nSELECT LOCATE('a', 'Elasticsearch');\n\nLOCATE('a', 'Elasticsearch')\n----------------------------\n3\n```\n\n```sql\nSELECT LOCATE('a', 'Elasticsearch', 5);\n\nLOCATE('a', 'Elasticsearch', 5)\n-------------------------------\n10\n```\n\n\n## `LTRIM` [sql-functions-string-ltrim]\n\n```sql\nLTRIM(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns the characters of `string_exp`, with leading blanks removed.\n\n```sql\nSELECT LTRIM('   Elastic');\n\nLTRIM('   Elastic')\n-------------------\nElastic\n```\n\n\n## `OCTET_LENGTH` [sql-functions-string-octet-length]\n\n```sql\nOCTET_LENGTH(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the length in bytes of the `string_exp` input expression.\n\n```sql\nSELECT OCTET_LENGTH('Elastic');\n\nOCTET_LENGTH('Elastic')\n-----------------------\n7\n```\n\n\n## `POSITION` [sql-functions-string-position]\n\n```sql\nPOSITION(\n    string_exp1, <1>\n    string_exp2) <2>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. string expression. If `null`, the function returns `null`.\n\n\n**Output**: integer\n\n**Description**: Returns the position of the `string_exp1` in `string_exp2`. The result is an exact numeric.\n\n```sql\nSELECT POSITION('Elastic', 'Elasticsearch');\n\nPOSITION('Elastic', 'Elasticsearch')\n------------------------------------\n1\n```\n\n\n## `REPEAT` [sql-functions-string-repeat]\n\n```sql\nREPEAT(\n    string_exp, <1>\n    count)      <2>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. integer expression. If `0`, negative, or `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a character string composed of `string_exp` repeated `count` times.\n\nThe resulting string cannot exceed a byte length of 1 MB.\n\n```sql\nSELECT REPEAT('La', 3);\n\n REPEAT('La', 3)\n----------------\nLaLaLa\n```\n\n\n## `REPLACE` [sql-functions-string-replace]\n\n```sql\nREPLACE(\n    source,      <1>\n    pattern,     <2>\n    replacement) <3>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. string expression. If `null`, the function returns `null`.\n3. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Search `source` for occurrences of `pattern`, and replace with `replacement`.\n\nThe resulting string cannot exceed a byte length of 1 MB.\n\n```sql\nSELECT REPLACE('Elastic','El','Fant');\n\nREPLACE('Elastic','El','Fant')\n------------------------------\nFantastic\n```\n\n\n## `RIGHT` [sql-functions-string-right]\n\n```sql\nRIGHT(\n    string_exp, <1>\n    count)      <2>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. integer expression. If `null`, the function returns `null`. If `0` or negative, the function returns an empty string.\n\n\n**Output**: string\n\n**Description**: Returns the rightmost count characters of `string_exp`.\n\n```sql\nSELECT RIGHT('Elastic',3);\n\nRIGHT('Elastic',3)\n------------------\ntic\n```\n\n\n## `RTRIM` [sql-functions-string-rtrim]\n\n```sql\nRTRIM(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns the characters of `string_exp` with trailing blanks removed.\n\n```sql\nSELECT RTRIM('Elastic   ');\n\nRTRIM('Elastic   ')\n-------------------\nElastic\n```\n\n\n## `SPACE` [sql-functions-string-space]\n\n```sql\nSPACE(count) <1>\n```\n\n**Input**:\n\n1. integer expression. If `null` or negative, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a character string consisting of `count` spaces.\n\nThe resulting string cannot exceed a byte length of 1 MB.\n\n```sql\nSELECT SPACE(3);\n\n   SPACE(3)\n---------------\n```\n\n\n## `STARTS_WITH` [sql-functions-string-startswith]\n\n```sql\nSTARTS_WITH(\n    source,   <1>\n    pattern)  <2>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. string expression. If `null`, the function returns `null`.\n\n\n**Output**: boolean value\n\n**Description**: Returns `true` if the source expression starts with the specified pattern, `false` otherwise. The matching is case sensitive.\n\n```sql\nSELECT STARTS_WITH('Elasticsearch', 'Elastic');\n\nSTARTS_WITH('Elasticsearch', 'Elastic')\n--------------------------------\ntrue\n```\n\n```sql\nSELECT STARTS_WITH('Elasticsearch', 'ELASTIC');\n\nSTARTS_WITH('Elasticsearch', 'ELASTIC')\n--------------------------------\nfalse\n```\n\n\n## `SUBSTRING` [sql-functions-string-substring]\n\n```sql\nSUBSTRING(\n    source, <1>\n    start,  <2>\n    length) <3>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n2. integer expression. If `null`, the function returns `null`.\n3. integer expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a character string that is derived from `source`, beginning at the character position specified by `start` for `length` characters.\n\n```sql\nSELECT SUBSTRING('Elasticsearch', 0, 7);\n\nSUBSTRING('Elasticsearch', 0, 7)\n--------------------------------\nElastic\n```\n\n\n## `TRIM` [sql-functions-string-trim]\n\n```sql\nTRIM(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns the characters of `string_exp`, with leading and trailing blanks removed.\n\n```sql\nSELECT TRIM('   Elastic   ') AS trimmed;\n\ntrimmed\n--------------\nElastic\n```\n\n\n## `UCASE` [sql-functions-string-ucase]\n\n```sql\nUCASE(string_exp) <1>\n```\n\n**Input**:\n\n1. string expression. If `null`, the function returns `null`.\n\n\n**Output**: string\n\n**Description**: Returns a string equal to that of the input, with all lowercase characters converted to uppercase.\n\n```sql\nSELECT UCASE('Elastic');\n\nUCASE('Elastic')\n----------------\nELASTIC\n```",
+              "filename": "elasticsearch-main/docs/reference/query-languages/sql/sql-functions-string.md"
+            },
+            {
+              "content": "% This is generated by ESQL's AbstractFunctionTestCase. Do not edit it. See ../README.md for how to regenerate it.\n\n### PI\nReturns [Pi](https://en.wikipedia.org/wiki/Pi), the ratio of a circle\u2019s circumference to its diameter.\n\n```esql\nROW PI()\n```",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/kibana/docs/functions/pi.md"
+            }
+          ],
+          "tool_call_id": "call_6k4OG7c7guAKTNFRjOlFtmHI",
+          "metadata": null,
+          "timestamp": "2025-10-03T05:58:16.945786+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "The `error_distance` parameter is crucial in the circle conversion process as it defines the maximum allowable deviation between the inscribed distance from the center of the circle to its sides and the actual radius of the circle being represented. Specifically:\n\n- **Impact on Accuracy**: Smaller values for `error_distance` result in a polygon that more closely approximates a perfect circle. For example, if `error_distance` is set to `1 meter`, the resulting polygon will have a shape much closer to that of the original circle when the radius is relatively small.\n\n- **Effect on Polygon Sides**: The parameter also influences the number of sides of the polygon that represents the circle. As `error_distance` decreases, the number of sides of the polygon increases. This means that for large circles (with more minor error distances), the polygon can be accurately represented with many more sides, while for smaller circles, fewer sides suffice.\n\nIn essence, setting the `error_distance` appropriately allows for a trade-off between performance (processing fewer sides) and accuracy of the circle representation in the final polygon (more sides for lower error).\n\nFor more detailed information, you can refer to the [Circle processor documentation](https://github.com/elastic/elasticsearch/blob/main/docs/reference/enrich-processor/ingest-circle-processor.md).",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 5429,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 263,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T05:58:17+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CMT61hjdjVZSCMWXdvOPoCkQFu0GS",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "ai-generated"
+}

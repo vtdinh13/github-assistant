@@ -1,0 +1,154 @@
+{
+  "agent_name": "es_agent_v2",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "What does the request circuit breaker do in Elasticsearch and how does it help manage memory during requests?",
+          "timestamp": "2025-10-03T04:07:39.042326+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\":\"request circuit breaker Elasticsearch\"}",
+          "tool_call_id": "call_4dwI0X7KrYxbYE3GqTQBdwxA",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 220,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 16,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T04:07:39+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CMRMxbSbxkkA3npvm2XGLK7YUSZpu",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [
+            {
+              "content": "# Elasticsearch\n\n**Elasticsearch** is a distributed, RESTful search and analytics engine capable of\nsolving a growing number of use cases. As the heart of the Elastic Stack, it\ncentrally stores your data so you can discover the expected and uncover the\nunexpected.\n\nFor more information about Elasticsearch, please visit\nhttps://www.elastic.co/products/elasticsearch.\n\n### Installation instructions\n\nPlease follow the documentation on [how to install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html).\n\n### Where to file issues and PRs\n\n- [Issues](https://github.com/elastic/elasticsearch/issues)\n- [PRs](https://github.com/elastic/elasticsearch/pulls)\n\n### Where to get help\n\n- [Elasticsearch Discuss Forums](https://discuss.elastic.co/c/elasticsearch)\n- [Elasticsearch Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/master/index.html)\n\n### Still need help?\n\nYou can learn more about the Elastic Community and also understand how to get more help\nvisiting [Elastic Community](https://www.elastic.co/community).\n\n\nThis software is governed by the [Elastic\nLicense](https://github.com/elastic/elasticsearch/blob/${major_minor_version}/licenses/ELASTIC-LICENSE-2.0.txt),\nand includes the full set of [free\nfeatures](https://www.elastic.co/subscriptions).\n\nView the detailed release notes\n[here](https://www.elastic.co/guide/en/elasticsearch/reference/${major_minor_version}/es-release-notes.html).",
+              "filename": "elasticsearch-main/distribution/docker/src/docker/iron_bank/readme.md"
+            },
+            {
+              "content": "# Elasticsearch\n\n{{es}} is a distributed search and analytics engine, scalable data store, and vector database built on Apache Lucene. It\u2019s optimized for speed and relevance on production-scale workloads. Use Elasticsearch to search, index, store, and analyze data of all shapes and sizes in near real time.\n\n## Quick links\n\n:::{dropdown} Useful links\n\n- [REST API Reference](./rest-apis/index.md)\n- [API Conventions](./rest-apis/api-conventions.md)\n- [Settings Reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)\n- [Breaking Changes](https://www.elastic.co/guide/en/elasticsearch/reference/current/breaking-changes.html)\n- [Compatibility](./rest-apis/compatibility.md)\n- [Glossary](https://www.elastic.co/guide/en/elasticsearch/reference/current/glossary.html)\n- [Plugin Development](https://www.elastic.co/guide/en/elasticsearch/plugins/current/index.html)\n- [Supported Platforms](https://www.elastic.co/support/matrix#matrix_jvm)\n:::\n\n## Setup and architecture\n\n- [Set up Elasticsearch](docs-content://deploy-manage/deploy/self-managed/installing-elasticsearch.md)\n- [Secure the Elastic Stack](docs-content://deploy-manage/security.md)\n- [Upgrade Elasticsearch](docs-content://deploy-manage/upgrade/deployment-or-cluster.md)\n- [Set up a cluster for high availability](docs-content://deploy-manage/tools.md)\n- [Stack monitoring](docs-content://deploy-manage/monitor/stack-monitoring.md)\n- [Troubleshooting](docs-content://troubleshoot/elasticsearch.md)\n- [Optimizations](docs-content://deploy-manage/production-guidance/optimize-performance.md)\n\n## Working with data\n\n- [Adding data to Elasticsearch](docs-content://manage-data/ingest.md)\n- [Connectors](https://www.elastic.co/docs/reference/search-connectors)\n- [Web crawler](https://www.elastic.co/search-labs/blog/elastic-open-crawler-release)\n- [Data streams](docs-content://manage-data/data-store/data-streams.md)\n- [Ingest pipelines](docs-content://manage-data/ingest/transform-enrich/ingest-pipelines.md)\n- [Mapping](docs-content://manage-data/data-store/mapping.md)\n- [Data management](docs-content://manage-data/lifecycle.md)\n- [Downsampling](docs-content://manage-data/lifecycle.md)\n- [Snapshot and restore](docs-content://deploy-manage/tools/snapshot-and-restore.md)\n\n## Search and analytics\n\n{{es}} is the search and analytics engine that powers the {{stack}}.\n\n- [Get started](docs-content://get-started/index.md)\n- [Learn how to search your data](docs-content://solutions/search/querying-for-search.md)\n- Query data programmatically: use query languages to run advanced search, filtering, or analytics\n  - [Query DSL](docs-content://explore-analyze/query-filter/languages/querydsl.md): full JSON-based query language\n  - [ES|QL](/reference/query-languages/esql.md): fast, SQL-like language with piped syntax\n  - [EQL](docs-content://explore-analyze/query-filter/languages/eql.md): for event-based time series data, such as logs, metrics, and traces\n  - [SQL](docs-content://explore-analyze/query-filter/languages/sql.md): SQL-style queries on Elasticsearch data\n- [Search applications](docs-content://solutions/search/search-applications.md)\n- [Aggregations](docs-content://explore-analyze/query-filter/aggregations.md)\n- [Geospatial analysis](docs-content://explore-analyze/geospatial-analysis.md)\n- [Machine Learning](docs-content://explore-analyze/machine-learning.md)\n- [Alerting](docs-content://explore-analyze/alerts-cases.md)\n\n## APIs and developer docs\n\n- [REST APIs](https://www.elastic.co/docs/reference/elasticsearch/rest-apis)\n- [{{es}} Clients](https://www.elastic.co/docs/reference/elasticsearch-clients)\n- [Painless](https://www.elastic.co/docs/reference/scripting-languages/painless/painless)\n- [Plugins and integrations](https://www.elastic.co/docs/reference/elasticsearch/plugins)\n- [Search Labs](https://www.elastic.co/search-labs)\n- [Notebook examples](https://www.elastic.co/search-labs/tutorials/examples)",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/circuit-breaker.html"
+              ],
+              "applies_to": {
+                "deployment": {
+                  "ess": null,
+                  "self": null
+                }
+              },
+              "content": "# Circuit breaker settings [circuit-breaker]\n\n$$$circuit-breaker-description$$$\n{{es}} contains multiple circuit breakers used to prevent operations from using an excessive amount of memory. Each breaker tracks the memory used by certain operations and specifies a limit for how much memory it may track. Additionally, there is a parent-level breaker that specifies the total amount of memory that may be tracked across all breakers.\n\nWhen a circuit breaker reaches its limit, {{es}} will reject further operations. See [Circuit breaker errors](docs-content://troubleshoot/elasticsearch/circuit-breaker-errors.md) for information about errors raised by circuit breakers.\n\nCircuit breakers do not track all memory usage in {{es}} and therefore provide only incomplete protection against excessive memory usage. If {{es}} uses too much memory then it may suffer from performance issues and nodes may even fail with an `OutOfMemoryError`. See [High JVM memory pressure](docs-content://troubleshoot/elasticsearch/high-jvm-memory-pressure.md) for help with troubleshooting high heap usage.\n\nExcept where noted otherwise, these settings can be dynamically updated on a live cluster with the [cluster-update-settings](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-cluster-put-settings) API.\n\nFor information about circuit breaker errors, see [Circuit breaker errors](docs-content://troubleshoot/elasticsearch/circuit-breaker-errors.md).\n\n\n### Parent circuit breaker [parent-circuit-breaker]\n\nThe parent-level breaker can be configured with the following settings:\n\n`indices.breaker.total.use_real_memory`\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting)) Determines whether the parent breaker should take real memory usage into account (`true`) or only consider the amount that is reserved by child circuit breakers (`false`). Defaults to `true`.\n\n$$$indices-breaker-total-limit$$$\n\n`indices.breaker.total.limit` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) Starting limit for overall parent breaker. Defaults to 70% of JVM heap if `indices.breaker.total.use_real_memory` is `false`. If `indices.breaker.total.use_real_memory` is `true`, defaults to 95% of the JVM heap.\n\n\n### Field data circuit breaker [fielddata-circuit-breaker]\n\nThe field data circuit breaker estimates the heap memory required to load a field into the [field data cache](/reference/elasticsearch/configuration-reference/field-data-cache-settings.md). If loading the field would cause the cache to exceed a predefined memory limit, the circuit breaker stops the operation and returns an error.\n\n$$$fielddata-circuit-breaker-limit$$$\n\n`indices.breaker.fielddata.limit` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) Limit for fielddata breaker. Defaults to 40% of JVM heap.\n\n$$$fielddata-circuit-breaker-overhead$$$\n\n`indices.breaker.fielddata.overhead` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) A constant that all field data estimations are multiplied with to determine a final estimation. Defaults to `1.03`.\n\n\n### Request circuit breaker [request-circuit-breaker]\n\nThe request circuit breaker allows Elasticsearch to prevent per-request data structures (for example, memory used for calculating aggregations during a request) from exceeding a certain amount of memory.\n\n$$$request-breaker-limit$$$\n\n`indices.breaker.request.limit` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) Limit for request breaker, defaults to 60% of JVM heap.\n\n$$$request-breaker-overhead$$$\n\n`indices.breaker.request.overhead` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) A constant that all request estimations are multiplied with to determine a final estimation. Defaults to `1`.\n\n\n### In flight requests circuit breaker [in-flight-circuit-breaker]\n\nThe in flight requests circuit breaker allows Elasticsearch to limit the memory usage of all currently active incoming requests on transport or HTTP level from exceeding a certain amount of memory on a node. The memory usage is based on the content length of the request itself. This circuit breaker also considers that memory is not only needed for representing the raw request but also as a structured object which is reflected by default overhead.\n\n`network.breaker.inflight_requests.limit`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) Limit for in flight requests breaker, defaults to 100% of JVM heap. This means that it is bound by the limit configured for the parent circuit breaker.\n\n`network.breaker.inflight_requests.overhead`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) A constant that all in flight requests estimations are multiplied with to determine a final estimation. Defaults to 2.\n\n\n### Script compilation circuit breaker [script-compilation-circuit-breaker]\n\nSlightly different than the previous memory-based circuit breaker, the script compilation circuit breaker limits the number of inline script compilations within a period of time.\n\nSee the \"prefer-parameters\" section of the [scripting](docs-content://explore-analyze/scripting/modules-scripting-using.md) documentation for more information.\n\n`script.max_compilations_rate`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) Limit for the number of unique dynamic scripts within a certain interval that are allowed to be compiled. Defaults to `150/5m`, meaning 150 every 5 minutes.\n\nIf the cluster regularly hits the given `max_compilation_rate`, it\u2019s possible the script cache is undersized, use [Nodes Stats](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-nodes-stats) to inspect the number of recent cache evictions, `script.cache_evictions_history` and compilations `script.compilations_history`.  If there are a large number of recent cache evictions or compilations, the script cache may be undersized, consider doubling the size of the script cache via the setting `script.cache.max_size`.\n\n\n### Regex circuit breaker [regex-circuit-breaker]\n\nPoorly written regular expressions can degrade cluster stability and performance. The regex circuit breaker limits the use and complexity of [regex in Painless scripts](/reference/scripting-languages/painless/painless-regexes.md).\n\n$$$script-painless-regex-enabled$$$\n\n`script.painless.regex.enabled` ![logo cloud](https://doc-icons.s3.us-east-2.amazonaws.com/logo_cloud.svg \"Supported on Elastic Cloud Hosted\")\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting)) Enables regex in Painless scripts. Accepts:\n\n    `limited` (Default)\n    :   Enables regex but limits complexity using the [`script.painless.regex.limit-factor`](#script-painless-regex-limit-factor) cluster setting.\n\n    `true`\n    :   Enables regex with no complexity limits. Disables the regex circuit breaker.\n\n    `false`\n    :   Disables regex. Any Painless script containing a regular expression returns an error.\n\n\n$$$script-painless-regex-limit-factor$$$\n\n`script.painless.regex.limit-factor`\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting)) Limits the number of characters a regular expression in a Painless script can consider. {{es}} calculates this limit by multiplying the setting value by the script input\u2019s character length.\n\n    For example, the input `foobarbaz` has a character length of `9`. If `script.painless.regex.limit-factor` is `6`, a regular expression on `foobarbaz` can consider up to 54 (9 * 6) characters. If the expression exceeds this limit, it triggers the regex circuit breaker and returns an error.\n\n    {{es}} only applies this limit if [`script.painless.regex.enabled`](#script-painless-regex-enabled) is `limited`.\n\n\n\n## EQL circuit breaker [circuit-breakers-page-eql]\n\nWhen a [sequence](/reference/query-languages/eql/eql-syntax.md#eql-sequences) query is executed, the node handling the query needs to keep some structures in memory, which are needed by the algorithm implementing the sequence matching. When large amounts of data need to be processed, and/or a large amount of matched sequences is requested by the user (by setting the [size](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-eql-search) query param), the memory occupied by those structures could potentially exceed the available memory of the JVM. This would cause an `OutOfMemory` exception which would bring down the node.\n\nTo prevent this from happening, a special circuit breaker is used, which limits the memory allocation during the execution of a [sequence](/reference/query-languages/eql/eql-syntax.md#eql-sequences) query. When the breaker is triggered, an `org.elasticsearch.common.breaker.CircuitBreakingException` is thrown and a descriptive error message including `circuit_breaking_exception` is returned to the user.\n\nThis circuit breaker can be configured using the following settings:\n\n`breaker.eql_sequence.limit`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) The limit for circuit breaker used to restrict the memory utilisation during the execution of an EQL sequence query. This value is defined as a percentage of the JVM heap. Defaults to `50%`. If the [parent circuit breaker](#parent-circuit-breaker) is set to a value less than `50%`, this setting uses that value as its default instead.\n\n`breaker.eql_sequence.overhead`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) A constant that sequence query memory estimates are multiplied by to determine a final estimate. Defaults to `1`.\n\n`breaker.eql_sequence.type`\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting)) Circuit breaker type. Valid values are:\n\n    `memory` (Default)\n    :   The breaker limits memory usage for EQL sequence queries.\n\n    `noop`\n    :   Disables the breaker.\n\n\n\n### {{ml-cap}} circuit breaker [circuit-breakers-page-model-inference]\n\n`breaker.model_inference.limit`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) The limit for the trained model circuit breaker. This value is defined as a percentage of the JVM heap. Defaults to `50%`. If the [parent circuit breaker](#parent-circuit-breaker) is set to a value less than `50%`, this setting uses that value as its default instead.\n\n`breaker.model_inference.overhead`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting)) A constant that all trained model estimations are multiplied by to determine a final estimation. Defaults to `1`.\n\n`breaker.model_inference.type`\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting)) The underlying type of the circuit breaker. There are two valid options: `noop` and `memory`. `noop` means the circuit breaker does nothing to prevent too much memory usage. `memory` means the circuit breaker tracks the memory used by trained models and can potentially break and prevent `OutOfMemory` errors. The default value is `memory`.",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/configuration-reference/circuit-breaker-settings.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html"
+              ],
+              "content": "# Mapping parameters [mapping-params]\n\nThe following pages provide detailed explanations of the various mapping parameters that are used by [field mappings](/reference/elasticsearch/mapping-reference/field-data-types.md):\n\nThe following mapping parameters are common to some or all field data types:\n\n* [`analyzer`](/reference/elasticsearch/mapping-reference/analyzer.md)\n* [`coerce`](/reference/elasticsearch/mapping-reference/coerce.md)\n* [`copy_to`](/reference/elasticsearch/mapping-reference/copy-to.md)\n* [`doc_values`](/reference/elasticsearch/mapping-reference/doc-values.md)\n* [`dynamic`](/reference/elasticsearch/mapping-reference/dynamic.md)\n* [`eager_global_ordinals`](/reference/elasticsearch/mapping-reference/eager-global-ordinals.md)\n* [`enabled`](/reference/elasticsearch/mapping-reference/enabled.md)\n* [`fielddata`](/reference/elasticsearch/mapping-reference/text.md#fielddata-mapping-param)\n* [`fields`](/reference/elasticsearch/mapping-reference/multi-fields.md)\n* [`format`](/reference/elasticsearch/mapping-reference/mapping-date-format.md)\n* [`ignore_above`](/reference/elasticsearch/mapping-reference/ignore-above.md)\n* [`ignore_malformed`](/reference/elasticsearch/mapping-reference/ignore-malformed.md)\n* [`index_options`](/reference/elasticsearch/mapping-reference/index-options.md)\n* [`index_phrases`](/reference/elasticsearch/mapping-reference/index-phrases.md)\n* [`index_prefixes`](/reference/elasticsearch/mapping-reference/index-prefixes.md)\n* [`index`](/reference/elasticsearch/mapping-reference/mapping-index.md)\n* [`meta`](/reference/elasticsearch/mapping-reference/mapping-field-meta.md)\n* [`normalizer`](/reference/elasticsearch/mapping-reference/normalizer.md)\n* [`norms`](/reference/elasticsearch/mapping-reference/norms.md)\n* [`null_value`](/reference/elasticsearch/mapping-reference/null-value.md)\n* [`position_increment_gap`](/reference/elasticsearch/mapping-reference/position-increment-gap.md)\n* [`properties`](/reference/elasticsearch/mapping-reference/properties.md)\n* [`search_analyzer`](/reference/elasticsearch/mapping-reference/search-analyzer.md)\n* [`similarity`](/reference/elasticsearch/mapping-reference/similarity.md)\n* [`subobjects`](/reference/elasticsearch/mapping-reference/subobjects.md)\n* [`store`](/reference/elasticsearch/mapping-reference/mapping-store.md)\n* [`term_vector`](/reference/elasticsearch/mapping-reference/term-vector.md)",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/mapping-parameters.md"
+            },
+            {
+              "applies_to": {
+                "stack": null,
+                "serverless": null
+              },
+              "navigation_title": "{{esql}}",
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-language.html",
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/esql.html",
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-getting-started.html",
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-using.html",
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/esql-examples.html"
+              ],
+              "products": [
+                {
+                  "id": "elasticsearch"
+                }
+              ],
+              "content": "# {{esql}} reference [esql-language]\n\n**Elasticsearch Query Language ({{esql}})** is a piped query language for filtering, transforming, and analyzing data.\n\n## What's {{esql}}? [_the_esql_compute_engine]\n\nYou can author {{esql}} queries to find specific events, perform statistical analysis, and create visualizations. It supports a wide range of commands, functions, and operators to perform various data operations, such as filter, aggregation, time-series analysis, and more. It initially supported a subset of the features available in Query DSL, but it is rapidly evolving with every {{serverless-full}} and Stack release.\n\n{{esql}} is designed to be easy to read and write, making it accessible for users with varying levels of technical expertise. It is particularly useful for data analysts, security professionals, and developers who need to work with large datasets in Elasticsearch.\n\n## How does it work? [search-analyze-data-esql]\n\n{{esql}} uses pipes (`|`) to manipulate and transform data in a step-by-step fashion. This approach allows you to compose a series of operations, where the output of one operation becomes the input for the next, enabling complex data transformations and analysis.\n\nHere's a simple example of an {{esql}} query:\n\n```esql\nFROM sample_data\n| SORT @timestamp DESC\n| LIMIT 3\n```\n\nNote that each line in the query represents a step in the data processing pipeline:\n- The `FROM` clause specifies the index or data stream to query\n- The `SORT` clause sorts the data by the `@timestamp` field in descending order\n- The `LIMIT` clause restricts the output to the top 3 results\n\n### User interfaces\n\nYou can interact with {{esql}} in two ways:\n\n- **Programmatic access**: Use {{esql}} syntax with the {{es}} `_query` endpoint.\n  - Refer to [](esql/esql-rest.md)\n\n- **Interactive interfaces**: Work with {{esql}} through Elastic user interfaces including Kibana Discover, Dashboards, Dev Tools, and analysis tools in Elastic Security and Observability.\n  - Refer to [Using {{esql}} in {{kib}}](docs-content://explore-analyze/query-filter/languages/esql-kibana.md).",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql.md"
+            }
+          ],
+          "tool_call_id": "call_4dwI0X7KrYxbYE3GqTQBdwxA",
+          "metadata": null,
+          "timestamp": "2025-10-03T04:07:40.165894+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "The request circuit breaker in Elasticsearch is designed to manage memory usage during the processing of requests. It specifically focuses on preventing excessive memory consumption by restricting the size of data structures that are created during a request, such as those used for aggregations.\n\n### How the Request Circuit Breaker Works\n\n1. **Memory Limitation**: The request circuit breaker allows you to set a limit on the amount of memory that can be allocated for a request's execution. This limit helps to control and manage the memory usage, thereby preventing situations where a request could cause the system to run out of memory.\n\n2. **Defaults**: By default, the limit for the request circuit breaker is set to 60% of the JVM heap memory. This percentage means that any memory usage related to calculations and data structures during a request cannot exceed this predefined threshold.\n\n3. **Triggering**: If a request attempts to utilize more memory than the specified limit, the request circuit breaker will trigger and reject the operation, returning an error to the user. This functionality helps in maintaining the stability of the Elasticsearch cluster by avoiding out-of-memory errors that could lead to node failures.\n\n4. **Dynamic Configuration**: The settings for the request circuit breaker can be configured dynamically on a live cluster, allowing administrators to adjust the memory limits as needed based on the workload and operational requirements.\n\nThe importance of the request circuit breaker lies in its ability to stabilize Elasticsearch by ensuring that no single request can exhaust the available memory resources, which in turn helps to maintain overall cluster performance and reliability.\n\nFor more details on circuit breaker settings, you can refer to the [circuit breaker settings documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/circuit-breaker.html) (elasticsearch-main/docs/reference/elasticsearch/configuration-reference/circuit-breaker-settings.md).",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 5546,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 365,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T04:07:40+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CMRMyctin7X990WsjbVgiFPsLJcHm",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "ai-generated"
+}
