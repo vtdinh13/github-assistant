@@ -1,0 +1,118 @@
+{
+  "agent_name": "es_agent",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "How does elastic search differ from a traditional relational database?",
+          "timestamp": "2025-09-30T20:50:13.817248+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\": \"differences between Elasticsearch and traditional relational databases\"}",
+          "tool_call_id": "call_Y6hGEYWOT50vRRfzIFoZpUti",
+          "part_kind": "tool-call"
+        },
+        {
+          "tool_name": "search",
+          "args": "{\"query\": \"Elasticsearch relational database comparison\"}",
+          "tool_call_id": "call_T3QVa2UC5ZyYHPwavgoVRP8Z",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 210,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 53,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T20:50:15+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CLbaZpuIna0JvstB4AudBzdlPmtaV",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [],
+          "tool_call_id": "call_Y6hGEYWOT50vRRfzIFoZpUti",
+          "metadata": null,
+          "timestamp": "2025-09-30T20:50:17.732558+00:00",
+          "part_kind": "tool-return"
+        },
+        {
+          "tool_name": "search",
+          "content": [],
+          "tool_call_id": "call_T3QVa2UC5ZyYHPwavgoVRP8Z",
+          "metadata": null,
+          "timestamp": "2025-09-30T20:50:17.732520+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "I couldn't find specific documentation on the differences between Elasticsearch and traditional relational databases. However, I can provide you with a general comparison based on common knowledge.\n\n### Key Differences Between Elasticsearch and Traditional Relational Databases:\n\n1. **Data Storage Model**:\n   - **Elasticsearch**: It uses a document-oriented model, where data is stored in JSON format as documents within an index. Each document can have a different structure.\n   - **Relational Databases**: They use a table-based model, where data is organized in rows and columns and follows a fixed schema.\n\n2. **Schema Flexibility**:\n   - **Elasticsearch**: It allows for dynamic schemas, meaning fields can be added or changed on the fly without disrupting existing data.\n   - **Relational Databases**: They require a predefined schema, and altering it can involve complex migrations.\n\n3. **Query Language**:\n   - **Elasticsearch**: It uses a RESTful API and provides a rich query DSL (Domain Specific Language) for full-text search and analytics.\n   - **Relational Databases**: They typically use SQL (Structured Query Language) for performing operations like queries, joins, updates, and transactions.\n\n4. **Scale and Performance**:\n   - **Elasticsearch**: It is designed for horizontal scalability, meaning it can handle large volumes of data across multiple nodes effectively. It is optimized for search and can retrieve data quickly.\n   - **Relational Databases**: While some can scale horizontally, they often require vertical scaling and can become performance bottlenecks for large datasets, especially for complex joins and queries.\n\n5. **Use Cases**:\n   - **Elasticsearch**: Primarily used for search functionalities (full-text search) and analytics on large volumes of unstructured data.\n   - **Relational Databases**: Best suited for transactional applications requiring strict consistency and integrity, such as financial systems and traditional business applications.\n\nThese differences highlight the strengths of each technology based on the requirements of the application being built. If you're interested in further details or specific features, I'd be happy to help!",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 277,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 426,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T20:50:18+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CLbaccZLzmwZa4CRUWGay1SkFBZHe",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "user"
+}

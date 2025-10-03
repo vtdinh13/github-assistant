@@ -1,0 +1,104 @@
+{
+  "agent_name": "es_agent",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "What are important factors to know about elastic search?",
+          "timestamp": "2025-09-30T19:39:10.975567+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\":\"important factors about elasticsearch\"}",
+          "tool_call_id": "call_jEOFNwMbWJvtsVif4LXTjHtU",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 209,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 17,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T19:39:12+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CLaTowvWaw8OLspz4agUsonqkC88u",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [],
+          "tool_call_id": "call_jEOFNwMbWJvtsVif4LXTjHtU",
+          "metadata": null,
+          "timestamp": "2025-09-30T19:39:13.520625+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "It seems I couldn't find specific information related to \"important factors about Elasticsearch\" in the documentation. However, I can provide some general guidance on key aspects of Elasticsearch that are important to understand:\n\n1. **Cluster and Node Architecture**: Elasticsearch operates as a cluster with multiple nodes. A cluster can have one or more nodes, and each node stores data and participates in the cluster's indexing and search capabilities.\n\n2. **Indexing**: Data in Elasticsearch is organized into indices (plural of index). Each index can be thought of like a database in a relational database system, and it contains documents that are made up of fields.\n\n3. **Document Structure**: Documents are the basic unit of information that can be indexed. Each document is a JSON object that contains fields which hold the actual data.\n\n4. **Sharding and Replication**: Each index can be divided into shards, and each shard can have one or more replicas. This ensures high availability and fault tolerance. It also allows Elasticsearch to scale horizontally.\n\n5. **Search Capabilities**: Elasticsearch provides powerful search features, including full-text search and complex querying capabilities using the Query DSL (Domain Specific Language).\n\n6. **Performance Optimization**: Factors like the size of the documents, the number of indices, and the configuration of shards and replicas can greatly affect performance.\n\n7. **APIs**: Elasticsearch offers RESTful APIs that facilitate interaction with the indices, allowing you to perform operations like indexing, searching, and managing data.\n\n8. **Monitoring and Management**: Monitoring tools such as Kibana can be integrated for visualizing data and tracking the status of Elasticsearch clusters.\n\n9. **Use Cases**: Elasticsearch is widely used for log and event data analysis, search engines, and analytics due to its speed and scalability.\n\nFor more detailed and specific information, I recommend checking the official documentation regularly. If you have other specific questions about Elasticsearch, feel free to ask!",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 234,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 389,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T19:39:14+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CLaTqwVpoMqOuwNy5toiUHhUrMqlZ",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "user"
+}

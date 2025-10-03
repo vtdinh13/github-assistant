@@ -1,0 +1,104 @@
+{
+  "agent_name": "es_agent",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "How is data stored in elastic search?",
+          "timestamp": "2025-09-30T20:33:37.517202+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\":\"data storage in elasticsearch\"}",
+          "tool_call_id": "call_sEs7Du3lDEeN7oQXj9gl5ddD",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 207,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 17,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T20:33:38+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CLbKU6aLpWUHKPKIBUoXV9luKbDGe",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [],
+          "tool_call_id": "call_sEs7Du3lDEeN7oQXj9gl5ddD",
+          "metadata": null,
+          "timestamp": "2025-09-30T20:33:39.875652+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "It seems that there are no specific search results regarding how data is stored in Elasticsearch from the repository's documentation. However, I can provide a general overview based on common knowledge.\n\nIn Elasticsearch, data is stored in the form of **documents** within **indices**. Each document is a basic unit of information that can be indexed, and it is represented in JSON format. Here's a brief outline of how data storage works in Elasticsearch:\n\n1. **Indices**: Data in Elasticsearch is organized into indices. Each index is a collection of documents that share similar characteristics. You can think of it like a database in a relational database management system.\n\n2. **Documents**: Each document is a JSON object containing fields and their corresponding values. Each document is identified by a unique ID, and it can be thought of as a row in a relational database.\n\n3. **Shards and Replicas**: Each index can be divided into smaller units called shards, which allows for distributed storage and processing. Additionally, replicas of shards can be created for redundancy and high availability.\n\n4. **Mapping**: Before indexing documents, you may define a mapping which outlines the structure of the documents, including types of fields and their characteristics (e.g., whether a field is analyzed or not).\n\n5. **Data Types**: Elasticsearch supports various data types for fields, such as text, keyword, date, number, boolean, and more.\n\nThis structure enables efficient storage and retrieval of structured and unstructured data, along with powerful search capabilities.\n\nFor more detailed information, you may want to look into the Elasticsearch documentation available at [Elasticsearch Documentation](https://github.com/elastic/elasticsearch/blob/main).",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 232,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 337,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-09-30T20:33:40+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CLbKWxLYkRbypnRLnqIqaLXHH1zY0",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "user"
+}

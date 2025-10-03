@@ -1,0 +1,190 @@
+{
+  "agent_name": "es_agent_v2",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "What is the significance of the `ignore_above` setting in Elasticsearch mappings, and how can I apply it at the index level?",
+          "timestamp": "2025-10-03T01:08:01.663902+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\": \"ignore_above setting Elasticsearch mappings\"}",
+          "tool_call_id": "call_9L3jLgeg9S4a5ZVZYb6wGcLJ",
+          "part_kind": "tool-call"
+        },
+        {
+          "tool_name": "search",
+          "args": "{\"query\": \"apply ignore_above index level Elasticsearch\"}",
+          "tool_call_id": "call_nU9aKgn0RSr7yCXVN7JwB8E6",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 228,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 53,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T01:08:01+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CMOZ7aV4yoKiJOgAYlW6JGnyKUDYn",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/index-mapping-ignore-above.html"
+              ],
+              "applies_to": {
+                "stack": "all",
+                "serverless": "all"
+              },
+              "content": "# ignore_above index setting [index-mapping-ignore-above]\n\nThe [`ignore_above` field-level setting](./ignore-above.md) can also be applied at the index level using `index.mapping.ignore_above`. This setting lets you define a maximum string length for all applicable fields across the index, including `keyword`, `wildcard`, and keyword values in `flattened` fields. Any values that exceed this limit will be [ignored](./mapping-ignored-field.md) during indexing and won\u2019t be stored.\n\nThis index-level setting ensures a consistent approach to managing excessively long values. It works the same as the field-level setting\u2014if a string\u2019s length goes over the specified limit, that string won\u2019t be indexed or stored. When dealing with arrays, each element is evaluated separately, and only the elements that exceed the limit are ignored.\n\n```console\nPUT my-index-000001\n{\n  \"settings\": {\n    \"index.mapping.ignore_above\": 256\n  }\n}\n```\n\nIn this example, all applicable fields in `my-index-000001` will ignore any strings longer than 256 characters.\n\n::::{tip}\nYou can override this index-wide setting for specific fields by specifying a custom `ignore_above` value in the field mapping.\n::::\n\n\n::::{note}\nJust like the field-level `ignore_above`, this setting only affects indexing and storage. The original values are still available in the `_source` field if `_source` is enabled, which is the default behavior in Elasticsearch.\n::::",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/index-mapping-ignore-above.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ignore-above.html"
+              ],
+              "content": "# ignore_above [ignore-above]\n\nStrings longer than the `ignore_above` setting will not be indexed or stored. For arrays of strings, `ignore_above` will be applied for each array element separately and string elements longer than `ignore_above` will not be indexed or stored.\n\n::::{note}\nAll strings/array elements will still be present in the `_source` field, if the latter is enabled which is the default in Elasticsearch.\n::::\n\n\n```console\nPUT my-index-000001\n{\n  \"mappings\": {\n    \"properties\": {\n      \"message\": {\n        \"type\": \"keyword\",\n        \"ignore_above\": 20 <1>\n      }\n    }\n  }\n}\n\nPUT my-index-000001/_doc/1 <2>\n{\n  \"message\": \"Syntax error\"\n}\n\nPUT my-index-000001/_doc/2 <3>\n{\n  \"message\": \"Syntax error with some long stacktrace\"\n}\n\nGET my-index-000001/_search <4>\n{\n  \"aggs\": {\n    \"messages\": {\n      \"terms\": {\n        \"field\": \"message\"\n      }\n    }\n  }\n}\n```\n\n1. This field will ignore any string longer than 20 characters.\n2. This document is indexed successfully.\n3. This document will be indexed, but without indexing the `message` field.\n4. Search returns both documents, but only the first is present in the terms aggregation.\n\n\n::::{tip}\nThe `ignore_above` setting can be updated on existing fields using the [update mapping API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-put-mapping).\n::::\n\n\nThis option is also useful for protecting against Lucene\u2019s term byte-length limit of `32766`.\n\n::::{note}\nThe value for `ignore_above` is the *character count*, but Lucene counts bytes. If you use UTF-8 text with many non-ASCII characters, you may want to set the limit to `32766 / 4 = 8191` since UTF-8 characters may occupy at most 4 bytes.\n::::",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/ignore-above.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-ignored-field.html"
+              ],
+              "content": "# _ignored field [mapping-ignored-field]\n\nThe `_ignored` field indexes and stores the names of every field in a document that has been ignored when the document was indexed. This can, for example, be the case when the field was malformed and [`ignore_malformed`](/reference/elasticsearch/mapping-reference/ignore-malformed.md) was turned on, when a `keyword` field\u2019s value exceeds its optional [`ignore_above`](/reference/elasticsearch/mapping-reference/ignore-above.md) setting, or when `index.mapping.total_fields.limit` has been reached and `index.mapping.total_fields.ignore_dynamic_beyond_limit` is set to `true`. For more index setting details, refer to [](/reference/elasticsearch/index-settings/mapping-limit.md).\n\nThis field is searchable with [`term`](/reference/query-languages/query-dsl/query-dsl-term-query.md), [`terms`](/reference/query-languages/query-dsl/query-dsl-terms-query.md) and [`exists`](/reference/query-languages/query-dsl/query-dsl-exists-query.md) queries, and is returned as part of the search hits.\n\nFor instance the below query matches all documents that have one or more fields that got ignored:\n\n```console\nGET _search\n{\n  \"query\": {\n    \"exists\": {\n      \"field\": \"_ignored\"\n    }\n  }\n}\n```\n\nSimilarly, the below query finds all documents whose `@timestamp` field was ignored at index time:\n\n```console\nGET _search\n{\n  \"query\": {\n    \"term\": {\n      \"_ignored\": \"@timestamp\"\n    }\n  }\n}\n```\n\nSince 8.15.0, the `_ignored` field supports aggregations as well. For example, the below query finds all fields that got ignored:\n\n```console\nGET _search\n{\n  \"aggs\": {\n    \"ignored_fields\": {\n      \"terms\": {\n         \"field\": \"_ignored\"\n      }\n    }\n  }\n}\n```",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/mapping-ignored-field.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-settings-limit.html"
+              ],
+              "navigation_title": "Mapping limit",
+              "applies_to": {
+                "stack": "all"
+              },
+              "content": "# Mapping limit settings [mapping-settings-limit]\n\n:::{include} _snippets/serverless-availability.md\n:::\n\nUse the following settings to limit the number of field mappings (created manually or dynamically) and prevent documents from causing a mapping explosion:\n\n$$$total-fields-limit$$$\n`index.mapping.total_fields.limit` {applies_to}`serverless: all`\n:   The maximum number of fields in an index. Field and object mappings, as well as field aliases count towards this limit. Mapped runtime fields count towards this limit as well. The default value is `1000`.\n\n    ::::{important}\n    The limit is in place to prevent mappings and searches from becoming too large. Higher values can lead to performance degradations and memory issues, especially in clusters with a high load or few resources.\n\n    If you increase this setting, we recommend you also increase the [`indices.query.bool.max_clause_count`](/reference/elasticsearch/configuration-reference/search-settings.md) setting, which limits the maximum number of clauses in a query.\n\n    ::::\n\n\n    ::::{tip}\n    If your field mappings contain a large, arbitrary set of keys, consider using the [flattened](/reference/elasticsearch/mapping-reference/flattened.md) data type, or setting the index setting `index.mapping.total_fields.ignore_dynamic_beyond_limit` to `true`.\n\n    ::::\n\n$$$ignore-dynamic-beyond-limit$$$\n`index.mapping.total_fields.ignore_dynamic_beyond_limit` {applies_to}`serverless: all`\n:   This setting determines what happens when a dynamically mapped field would exceed the total fields limit. When set to `false` (the default), the index request of the document that tries to add a dynamic field to the mapping will fail with the message `Limit of total fields [X] has been exceeded`. When set to `true`, the index request will not fail. Instead, fields that would exceed the limit are not added to the mapping, similar to [`dynamic: false`](/reference/elasticsearch/mapping-reference/dynamic.md). The fields that were not added to the mapping will be added to the [`_ignored` field](/reference/elasticsearch/mapping-reference/mapping-ignored-field.md). The default value is `false`.\n\n`index.mapping.depth.limit`\n:   The maximum depth for a field, which is measured as the number of inner objects. For instance, if all fields are defined at the root object level, then the depth is `1`. If there is one object mapping, then the depth is `2`, etc. Default is `20`.\n\n`index.mapping.nested_fields.limit`\n:   The maximum number of distinct `nested` mappings in an index. The `nested` type should only be used in special cases, when arrays of objects need to be queried independently of each other. To safeguard against poorly designed mappings, this setting limits the number of unique `nested` types per index. Default is `50`.\n\n`index.mapping.nested_objects.limit`\n:   The maximum number of nested JSON objects that a single document can contain across all `nested` types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is `10000`.\n\n`index.mapping.field_name_length.limit`\n:   Setting for the maximum length of a field name. This setting isn\u2019t really something that addresses mappings explosion but might still be useful if you want to limit the field length. It usually shouldn\u2019t be necessary to set this setting. The default is okay unless a user starts to add a huge number of fields with really long names. Default is `Long.MAX_VALUE` (no limit).\n\n`index.mapping.dimension_fields.limit`\n:   (Dynamic, integer) Maximum number of [time series dimensions](docs-content://manage-data/data-store/data-streams/time-series-data-stream-tsds.md#time-series-dimension) for the index. Defaults to `32768`.",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index-settings/mapping-limit.md"
+            },
+            {
+              "content": "::::{note}\nThis is pushed to the underlying search index if one side of the comparison is constant and the other side is a field in the index that has both an [mapping-index](/reference/elasticsearch/mapping-reference/mapping-index.md) and [doc-values](/reference/elasticsearch/mapping-reference/doc-values.md).\n::::",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/operators/detaileddescription/equals.md"
+            }
+          ],
+          "tool_call_id": "call_9L3jLgeg9S4a5ZVZYb6wGcLJ",
+          "metadata": null,
+          "timestamp": "2025-10-03T01:08:03.745822+00:00",
+          "part_kind": "tool-return"
+        },
+        {
+          "tool_name": "search",
+          "content": [
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/index-mapping-ignore-above.html"
+              ],
+              "applies_to": {
+                "stack": "all",
+                "serverless": "all"
+              },
+              "content": "# ignore_above index setting [index-mapping-ignore-above]\n\nThe [`ignore_above` field-level setting](./ignore-above.md) can also be applied at the index level using `index.mapping.ignore_above`. This setting lets you define a maximum string length for all applicable fields across the index, including `keyword`, `wildcard`, and keyword values in `flattened` fields. Any values that exceed this limit will be [ignored](./mapping-ignored-field.md) during indexing and won\u2019t be stored.\n\nThis index-level setting ensures a consistent approach to managing excessively long values. It works the same as the field-level setting\u2014if a string\u2019s length goes over the specified limit, that string won\u2019t be indexed or stored. When dealing with arrays, each element is evaluated separately, and only the elements that exceed the limit are ignored.\n\n```console\nPUT my-index-000001\n{\n  \"settings\": {\n    \"index.mapping.ignore_above\": 256\n  }\n}\n```\n\nIn this example, all applicable fields in `my-index-000001` will ignore any strings longer than 256 characters.\n\n::::{tip}\nYou can override this index-wide setting for specific fields by specifying a custom `ignore_above` value in the field mapping.\n::::\n\n\n::::{note}\nJust like the field-level `ignore_above`, this setting only affects indexing and storage. The original values are still available in the `_source` field if `_source` is enabled, which is the default behavior in Elasticsearch.\n::::",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/index-mapping-ignore-above.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ignore-above.html"
+              ],
+              "content": "# ignore_above [ignore-above]\n\nStrings longer than the `ignore_above` setting will not be indexed or stored. For arrays of strings, `ignore_above` will be applied for each array element separately and string elements longer than `ignore_above` will not be indexed or stored.\n\n::::{note}\nAll strings/array elements will still be present in the `_source` field, if the latter is enabled which is the default in Elasticsearch.\n::::\n\n\n```console\nPUT my-index-000001\n{\n  \"mappings\": {\n    \"properties\": {\n      \"message\": {\n        \"type\": \"keyword\",\n        \"ignore_above\": 20 <1>\n      }\n    }\n  }\n}\n\nPUT my-index-000001/_doc/1 <2>\n{\n  \"message\": \"Syntax error\"\n}\n\nPUT my-index-000001/_doc/2 <3>\n{\n  \"message\": \"Syntax error with some long stacktrace\"\n}\n\nGET my-index-000001/_search <4>\n{\n  \"aggs\": {\n    \"messages\": {\n      \"terms\": {\n        \"field\": \"message\"\n      }\n    }\n  }\n}\n```\n\n1. This field will ignore any string longer than 20 characters.\n2. This document is indexed successfully.\n3. This document will be indexed, but without indexing the `message` field.\n4. Search returns both documents, but only the first is present in the terms aggregation.\n\n\n::::{tip}\nThe `ignore_above` setting can be updated on existing fields using the [update mapping API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-put-mapping).\n::::\n\n\nThis option is also useful for protecting against Lucene\u2019s term byte-length limit of `32766`.\n\n::::{note}\nThe value for `ignore_above` is the *character count*, but Lucene counts bytes. If you use UTF-8 text with many non-ASCII characters, you may want to set the limit to `32766 / 4 = 8191` since UTF-8 characters may occupy at most 4 bytes.\n::::",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/mapping-reference/ignore-above.md"
+            },
+            {
+              "content": "::::{note}\nThis is pushed to the underlying search index if one side of the comparison is constant and the other side is a field in the index that has both an [mapping-index](/reference/elasticsearch/mapping-reference/mapping-index.md) and [doc-values](/reference/elasticsearch/mapping-reference/doc-values.md).\n::::",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/operators/detaileddescription/equals.md"
+            },
+            {
+              "content": "::::{note}\nThis is pushed to the underlying search index if one side of the comparison is constant and the other side is a field in the index that has both an [mapping-index](/reference/elasticsearch/mapping-reference/mapping-index.md) and [doc-values](/reference/elasticsearch/mapping-reference/doc-values.md).\n::::",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/operators/detaileddescription/not_equals.md"
+            },
+            {
+              "content": "::::{note}\nThis is pushed to the underlying search index if one side of the comparison is constant and the other side is a field in the index that has both an [mapping-index](/reference/elasticsearch/mapping-reference/mapping-index.md) and [doc-values](/reference/elasticsearch/mapping-reference/doc-values.md).\n::::",
+              "filename": "elasticsearch-main/docs/reference/query-languages/esql/_snippets/operators/detaileddescription/less_than_or_equal.md"
+            }
+          ],
+          "tool_call_id": "call_nU9aKgn0RSr7yCXVN7JwB8E6",
+          "metadata": null,
+          "timestamp": "2025-10-03T01:08:03.745736+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "The `ignore_above` setting in Elasticsearch is a crucial feature used to exclude strings that exceed a certain length during indexing. Here's a detailed explanation of its significance and how you can apply it at the index level:\n\n### Significance of `ignore_above`\n\n1. **Field-Level Control**: The `ignore_above` setting can be specified for individual fields in a document. If the length of a string exceeds the defined limit, that string will not be indexed or stored, although it remains in the original document (`_source`).\n\n2. **Array Handling**: For fields that are arrays of strings, the `ignore_above` setting applies to each string element independently. Any string in the array that exceeds the limit will be ignored during indexing.\n\n3. **Index Performance**: This setting can help improve performance by preventing excessively long strings, which can be problematic in terms of storage and retrieval.\n\n4. **Protection Against Limits**: It also acts as a safeguard against Lucene\u2019s internal limits for term lengths, which is typically restricted to 32,766 bytes.\n\n### Applying `ignore_above` at the Index Level\n\nYou can apply this setting at the index level using the `index.mapping.ignore_above` parameter. This allows you to define a maximum string length for all applicable fields across the index, including `keyword`, `wildcard`, and `flattened` fields.\n\n#### Example:\nTo apply the `ignore_above` setting at the index level, you can use the following command when creating an index:\n\n```json\nPUT my-index-000001\n{\n  \"settings\": {\n    \"index.mapping.ignore_above\": 256\n  }\n}\n```\n\nIn this example, all applicable fields in `my-index-000001` will ignore any strings longer than 256 characters. This provides a consistent approach to managing long string values across the index.\n\n### Tips:\n- If you want to override the index-wide setting for specific fields, you can still specify a custom value for `ignore_above` in the individual field mappings.\n- Remember that, similar to the field-level setting, this index-level setting affects only the indexing; the original values are still available in the `_source` field if it is enabled (which it typically is by default).\n\nYou can find the specific details and examples in the Elasticsearch documentation:\n- [ignore_above index setting](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-mapping-ignore-above.html) - [link](https://github.com/elastic/elasticsearch/blob/main/docs/reference/elasticsearch/mapping-reference/index-mapping-ignore-above.md)\n- [ignore_above field-level setting](https://www.elastic.co/guide/en/elasticsearch/reference/current/ignore-above.html) - [link](https://github.com/elastic/elasticsearch/blob/main/docs/reference/elasticsearch/mapping-reference/ignore-above.md)",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 4018,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 586,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T01:08:03+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CMOZ9PRu6ykEVDdpYvGxc7C3JY9FH",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "ai-generated"
+}

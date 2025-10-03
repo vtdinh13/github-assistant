@@ -1,0 +1,144 @@
+{
+  "agent_name": "es_agent_v2",
+  "system_prompt": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "tools": [
+    "search"
+  ],
+  "messages": [
+    {
+      "parts": [
+        {
+          "content": "Can I assign an index to nodes using multiple custom attributes in my ILM policy?",
+          "timestamp": "2025-10-03T01:07:26.376666+00:00",
+          "part_kind": "user-prompt"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "args": "{\"query\":\"ILM policy node allocation custom attributes\"}",
+          "tool_call_id": "call_dD3k2gmFBkNLQ7AswjfY79pD",
+          "part_kind": "tool-call"
+        }
+      ],
+      "usage": {
+        "input_tokens": 218,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 19,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T01:07:26+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "tool_calls"
+      },
+      "provider_response_id": "chatcmpl-CMOYYCIEgTh4U23l5ttWmGK5iZKiu",
+      "finish_reason": "tool_call"
+    },
+    {
+      "parts": [
+        {
+          "tool_name": "search",
+          "content": [
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ilm-set-priority.html"
+              ],
+              "content": "# Set priority [ilm-set-priority]\n\nPhases allowed: hot, warm, cold.\n\nSets the [priority](/reference/elasticsearch/index-settings/recovery-prioritization.md) of the index as soon as the policy enters the hot, warm, or cold phase. Higher priority indices are recovered before indices with lower priorities following a node restart.\n\nGenerally, indexes in the hot phase should have the highest value and indexes in the cold phase should have the lowest values. For example: 100 for the hot phase, 50 for the warm phase, and 0 for the cold phase. Indices that don\u2019t set this value have a default priority of 1.\n\n## Options [ilm-set-priority-options]\n\n`priority`\n:   (Required, integer) The priority for the index. Must be 0 or greater. Set to `null` to remove the priority.\n\n\n## Example [ilm-set-priority-ex]\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"warm\": {\n        \"actions\": {\n          \"set_priority\" : {\n            \"priority\": 50\n          }\n        }\n      }\n    }\n  }\n}\n```",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index-lifecycle-actions/ilm-set-priority.md"
+            },
+            {
+              "navigation_title": "{{ilm-cap}} settings",
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ilm-settings.html"
+              ],
+              "applies_to": {
+                "stack": "all"
+              },
+              "content": "# {{ilm-cap}} settings in {{es}} [ilm-settings]\n\n\nThese are the settings available for configuring [{{ilm}}](docs-content://manage-data/lifecycle/index-lifecycle-management.md) ({{ilm-init}}).\n\n## Cluster level settings [_cluster_level_settings_3]\n\n`xpack.ilm.enabled`\n:   ([Static](docs-content://deploy-manage/stack-settings.md#static-cluster-setting), Boolean)\n\n    :::{admonition} Deprecated in 7.8.0\n    This deprecated setting has no effect and will be removed in Elasticsearch 8.0.\n    :::\n\n`indices.lifecycle.history_index_enabled`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting), Boolean) Whether ILM\u2019s history index is enabled. If enabled, ILM will record the history of actions taken as part of ILM policies to the `ilm-history-*` indices. Defaults to `true`.\n\n$$$indices-lifecycle-poll-interval$$$\n\n`indices.lifecycle.poll_interval`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting), [time unit value](/reference/elasticsearch/rest-apis/api-conventions.md#time-units)) How often {{ilm}} checks for indices that meet policy criteria. Defaults to `10m`.\n\n$$$indices-lifecycle-rollover-only-if-has-documents$$$\n\n`indices.lifecycle.rollover.only_if_has_documents`\n:   ([Dynamic](docs-content://deploy-manage/stack-settings.md#dynamic-cluster-setting), Boolean) Whether ILM will only roll over non-empty indices. If enabled, ILM will only roll over indices as long as they contain at least one document. Defaults to `true`.\n\n\n## Index level settings [_index_level_settings_2]\n\n:::{include} ../index-settings/_snippets/serverless-availability.md\n:::\n\nThese index-level {{ilm-init}} settings are typically configured through index templates. For more information, see [Create a lifecycle policy](docs-content://manage-data/lifecycle/index-lifecycle-management/tutorial-automate-rollover.md#ilm-gs-create-policy).\n\n`index.lifecycle.indexing_complete`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), Boolean) Indicates whether or not the index has been rolled over. Automatically set to `true` when {{ilm-init}} completes the rollover action. You can explicitly set it to [skip rollover](docs-content://manage-data/lifecycle/index-lifecycle-management/skip-rollover.md). Defaults to `false`.\n\n$$$index-lifecycle-name$$$\n\n`index.lifecycle.name`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), string) The name of the policy to use to manage the index. For information about how {{es}} applies policy changes, see [Policy updates](docs-content://manage-data/lifecycle/index-lifecycle-management/policy-updates.md). If you are restoring an index from snapshot that was previously managed by {{ilm}}, you can override this setting to null during the restore operation to disable further management of the index. See also [Index level settings](#index-lifecycle-rollover-alias).\n\n$$$index-lifecycle-origination-date$$$\n\n`index.lifecycle.origination_date` {applies_to}`serverless: all`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), long) If specified, this is the timestamp used to calculate the index age for its phase transitions. Use this setting if you create a new index that contains old data and want to use the original creation date to calculate the index age. Specified as a Unix epoch value in milliseconds.\n\n$$$index-lifecycle-parse-origination-date$$$\n\n`index.lifecycle.parse_origination_date`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), Boolean) Set to `true` to parse the origination date from the index name. This origination date is used to calculate the index age for its phase transitions. The index name must match the pattern `^.*-{{date_format}}-\\\\d+`, where the `date_format` is `yyyy.MM.dd` and the trailing digits are optional. An index that was rolled over would normally match the full format, for example `logs-2016.10.31-000002`). If the index name doesn\u2019t match the pattern, index creation fails.\n\n$$$index-lifecycle-step-wait-time-threshold$$$\n\n`index.lifecycle.step.wait_time_threshold`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), [time value](/reference/elasticsearch/rest-apis/api-conventions.md#time-units)) Time to wait for the cluster to resolve allocation issues during an {{ilm-init}} [`shrink`](/reference/elasticsearch/index-lifecycle-actions/ilm-shrink.md) action. Must be greater than `1h` (1 hour). Defaults to `12h` (12 hours). See [Shard allocation for shrink](/reference/elasticsearch/index-lifecycle-actions/ilm-shrink.md#ilm-shrink-shard-allocation).\n\n$$$index-lifecycle-rollover-alias$$$\n\n`index.lifecycle.rollover_alias`\n:   ([Dynamic](../index-settings/index.md#index-modules-settings-description), string) The index alias to update when the index rolls over. Specify when using a policy that contains a rollover action. When the index rolls over, the alias is updated to reflect that the index is no longer the write index. For more information about rolling indices, see [Rollover](docs-content://manage-data/lifecycle/index-lifecycle-management/rollover.md). If you are restoring an index from snapshot that was previously managed by {{ilm}}, you can override this setting to null during the restore operation to disable further management of future indices. See also [Index level settings](#index-lifecycle-name).",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/configuration-reference/index-lifecycle-management-settings.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ilm-readonly.html"
+              ],
+              "content": "# Read only [ilm-readonly]\n\nPhases allowed: hot, warm, cold.\n\nMakes the index data read-only; disables data write operations against the index.\n\nTo use the `readonly` action in the `hot` phase, the `rollover` action **must** be present. If no rollover action is configured, {{ilm-init}} will reject the policy.\n\n## Options [ilm-read-only-options]\n\nNone.\n\n\n## Example [ilm-read-only-ex]\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"warm\": {\n        \"actions\": {\n          \"readonly\" : { }\n        }\n      }\n    }\n  }\n}\n```",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index-lifecycle-actions/ilm-readonly.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ilm-allocate.html"
+              ],
+              "content": "# Allocate [ilm-allocate]\n\nPhases allowed: warm, cold.\n\nUpdates the index settings to change which nodes are allowed to host the index shards and change the number of replicas.\n\nThe allocate action is not allowed in the hot phase. The initial allocation for the index must be done manually or via [index templates](docs-content://manage-data/data-store/templates.md).\n\nYou can configure this action to modify both the allocation rules and number of replicas, only the allocation rules, or only the number of replicas. For more information about how {{es}} uses replicas for scaling, see [Get ready for production](docs-content://deploy-manage/production-guidance/elasticsearch-in-production-environments.md). See [Index-level shard allocation filtering](/reference/elasticsearch/index-settings/shard-allocation.md) for more information about controlling where {{es}} allocates shards of a particular index.\n\n## Options [ilm-allocate-options]\n\nYou must specify the number of replicas or at least one `include`, `exclude`, or `require` option. An empty allocate action is invalid.\n\nFor more information about using custom attributes for shard allocation, refer to [](/reference/elasticsearch/index-settings/shard-allocation.md).\n\n`number_of_replicas`\n:   (Optional, integer) Number of replicas to assign to the index.\n\n`total_shards_per_node`\n:   (Optional, integer) The maximum number of shards for the index on a single {{es}} node. A value of `-1` is interpreted as unlimited. See [total shards](/reference/elasticsearch/index-settings/total-shards-per-node.md).\n\n`include`\n:   (Optional, object) Assigns an index to nodes that have at least *one* of the specified custom attributes.\n\n`exclude`\n:   (Optional, object) Assigns an index to nodes that have *none* of the specified custom attributes.\n\n`require`\n:   (Optional, object) Assigns an index to nodes that have *all* of the specified custom attributes.\n\n\n## Example [ilm-allocate-ex]\n\nThe allocate action in the following policy changes the index\u2019s number of replicas to `2`. No more than 200 shards for the index will be placed on any single node. Otherwise the index allocation rules are not changed.\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"warm\": {\n        \"actions\": {\n          \"allocate\" : {\n            \"number_of_replicas\" : 2,\n            \"total_shards_per_node\" : 200\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n### Assign index to nodes using a custom attribute [ilm-allocate-assign-index-attribute-ex]\n\nThe allocate action in the following policy assigns the index to nodes that have a `box_type` of *hot* or *warm*.\n\nTo designate a node\u2019s `box_type`, you set a custom attribute in the node configuration. For example, set `node.attr.box_type: hot` in `elasticsearch.yml`. For more information, refer to [](/reference/elasticsearch/index-settings/shard-allocation.md#index-allocation-filters).\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"warm\": {\n        \"actions\": {\n          \"allocate\" : {\n            \"include\" : {\n              \"box_type\": \"hot,warm\"\n            }\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n\n### Assign index to nodes based on multiple attributes [ilm-allocate-assign-index-multi-attribute-ex]\n\nThe allocate action can also assign indices to nodes based on multiple node attributes. The following action assigns indices based on the `box_type` and `storage` node attributes.\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"cold\": {\n        \"actions\": {\n          \"allocate\" : {\n            \"require\" : {\n              \"box_type\": \"cold\",\n              \"storage\": \"high\"\n            }\n          }\n        }\n      }\n    }\n  }\n}\n```\n\n\n### Assign index to a specific node and update replica settings [ilm-allocate-assign-index-node-ex]\n\nThe allocate action in the following policy updates the index to have one replica per shard and be allocated to nodes that have a `box_type` of *cold*.\n\nTo designate a node\u2019s `box_type`, you set a custom attribute in the node configuration. For example, set `node.attr.box_type: cold` in `elasticsearch.yml`. For more information, refer to [](/reference/elasticsearch/index-settings/shard-allocation.md#index-allocation-filters).\n\n```console\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"warm\": {\n        \"actions\": {\n          \"allocate\" : {\n            \"number_of_replicas\": 1,\n            \"require\" : {\n              \"box_type\": \"cold\"\n            }\n        }\n        }\n      }\n    }\n  }\n}\n```",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index-lifecycle-actions/ilm-allocate.md"
+            },
+            {
+              "mapped_pages": [
+                "https://www.elastic.co/guide/en/elasticsearch/reference/current/ilm-downsample.html"
+              ],
+              "content": "# Downsample [ilm-downsample]\n\nPhases allowed: hot, warm, cold.\n\nAggregates a time series (TSDS) index and stores pre-computed statistical summaries (`min`, `max`, `sum`, `value_count` and `avg`) for each metric field grouped by a configured time interval. For example, a TSDS index that contains metrics sampled every 10 seconds can be downsampled to an hourly index. All documents within an hour interval are summarized and stored as a single document and stored in the downsample index.\n\nThis action corresponds to the  [downsample API](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-downsample).\n\nThe name of the resulting downsample index is `downsample-<original-index-name>-<random-uuid>`. If {{ilm-init}} performs the `downsample` action on a backing index for a data stream, the downsample index becomes a backing index for the same stream and the source index is deleted.\n\nTo use the `downsample` action in the `hot` phase, the `rollover` action **must** be present. If no rollover action is configured, {{ilm-init}} will reject the policy.\n\n## Options [ilm-downsample-options]\n\n`fixed_interval`\n:   (Required, string) The [fixed time interval](docs-content://manage-data/lifecycle/rollup/understanding-groups.md#rollup-understanding-group-intervals) into which the data will be downsampled.\n\n\n## Example [ilm-downsample-ex]\n\n```console\nPUT _ilm/policy/datastream_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"hot\": {\n        \"actions\": {\n          \"rollover\": {\n            \"max_docs\": 1\n          },\n          \"downsample\": {\n  \t          \"fixed_interval\": \"1h\"\n  \t      }\n        }\n      }\n    }\n  }\n}\n```",
+              "filename": "elasticsearch-main/docs/reference/elasticsearch/index-lifecycle-actions/ilm-downsample.md"
+            }
+          ],
+          "tool_call_id": "call_dD3k2gmFBkNLQ7AswjfY79pD",
+          "metadata": null,
+          "timestamp": "2025-10-03T01:07:27.506269+00:00",
+          "part_kind": "tool-return"
+        }
+      ],
+      "instructions": "You are a helpful assistant that answers questions about documentation.  \n\nUse the search tool to find relevant information from the repository before answering questions.  \n\nIf you can find specific information through search, use it to provide accurate answers.\n\nAlways include references by citing the filename of the source material you used.\nReplace it with the full path to the GitHub repository:\n\"https://github.com/elastic/elasticsearch/blob/main/\"\nFormat: [LINK TITLE](FULL_GITHUB_LINK)\n\n\nIf the search doesn't return relevant results, let the user know and provide general guidance.",
+      "kind": "request"
+    },
+    {
+      "parts": [
+        {
+          "content": "Yes, you can assign an index to nodes using multiple custom attributes in your Index Lifecycle Management (ILM) policy. The `allocate` action allows you to specify node allocation rules using multiple attributes.\n\nHere\u2019s an example of how to use the `require` field to assign an index to nodes based on multiple attributes:\n\n```json\nPUT _ilm/policy/my_policy\n{\n  \"policy\": {\n    \"phases\": {\n      \"cold\": {\n        \"actions\": {\n          \"allocate\": {\n            \"require\": {\n              \"box_type\": \"cold\",\n              \"storage\": \"high\"\n            }\n          }\n        }\n      }\n    }\n  }\n}\n```\n\nIn this example, the policy requires that the index is allocated only to nodes that have both the `box_type` set to `cold` and the `storage` set to `high`. \n\nFor additional information on how to configure node attributes and the specifics of allocation, see the following documentation: [ILM Allocate Action](https://github.com/elastic/elasticsearch/blob/main/docs/reference/elasticsearch/index-lifecycle-actions/ilm-allocate.md).",
+          "id": null,
+          "part_kind": "text"
+        }
+      ],
+      "usage": {
+        "input_tokens": 3787,
+        "cache_write_tokens": 0,
+        "cache_read_tokens": 0,
+        "output_tokens": 227,
+        "input_audio_tokens": 0,
+        "cache_audio_read_tokens": 0,
+        "output_audio_tokens": 0,
+        "details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "model_name": "gpt-4o-mini-2024-07-18",
+      "timestamp": "2025-10-03T01:07:28+00:00",
+      "kind": "response",
+      "provider_name": "openai",
+      "provider_details": {
+        "finish_reason": "stop"
+      },
+      "provider_response_id": "chatcmpl-CMOYaNC95tTAaugUWILorFesiZARm",
+      "finish_reason": "stop"
+    }
+  ],
+  "source": "ai-generated"
+}
