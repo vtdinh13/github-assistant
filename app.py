@@ -16,7 +16,8 @@ import logs
 # ---------- App setup ----------
 st.set_page_config(page_title="GitHub Assistant", page_icon="🤖", layout="wide")
 st.title("GitHub Assistant")
-st.caption("Chat with an agent grounded on a GitHub repository. Initialize it in the sidebar, then ask away!")
+st.caption("Chat with an agent grounded on a GitHub repository. In the sidebar, enter the **owner** and **repository name** to get started.  For example: `https://github.com/elastic/elasticsearch` (owner = `elastic`, repo = `elasticsearch`). Once initialized, ask your questions and have fun! 🎉")
+
 
 # ---------- Session state ----------
 if "messages" not in st.session_state:
@@ -140,7 +141,7 @@ def _ui_stream_write(generator: Iterator[str] | AsyncIterator[str]) -> str:
 # ---------- Sidebar: initialization ----------
 with st.sidebar:
     st.header("⚙️ Setup")
-    st.session_state.repo_owner = st.text_input("Repo owner (GitHub user/org)", value=st.session_state.repo_owner)
+    st.session_state.repo_owner = st.text_input("Repo owner)", value=st.session_state.repo_owner)
     st.session_state.repo_name = st.text_input("Repo name", value=st.session_state.repo_name)
     init_clicked = st.button("Initialize / Rebuild Index", type="primary", use_container_width=True)
 
@@ -156,7 +157,7 @@ with st.sidebar:
                 st.session_state.messages = [{"role": "system", "content": f"Agent initialized for {st.session_state.repo_owner}/{st.session_state.repo_name}."}]
 
     st.markdown("---")
-    st.caption("Tip: You can rebuild the index anytime after pushing new docs to the repo.")
+    st.caption("Tip: You can rebuild the index anytime after editing the repo owner and name.")
 
 
 # ---------- Chat history render ----------
