@@ -16,6 +16,17 @@ import logs
 # ---------- App setup ----------
 st.set_page_config(page_title="GitHub Assistant", page_icon="🤖", layout="wide")
 st.title("GitHub Assistant")
+st.markdown(
+    """
+    <div style='font-size:16px; color: gray;'>
+        Chat with an AI agent trained on a GitHub repository.  
+        Enter the <b>owner</b> and <b>repository name</b> in the sidebar.  
+        Example: <code>https://github.com/elastic/elasticsearch</code>, so owner = `elastic` and repo = `elasticsearch`.
+        Then ask your questions and have fun exploring 🎉 !
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 st.caption("Chat with an agent grounded on a GitHub repository. In the sidebar, enter the **owner** and **repository name** to get started.  For example: `https://github.com/elastic/elasticsearch` (owner = `elastic`, repo = `elasticsearch`). Once initialized, ask your questions and have fun! 🎉")
 
 
