@@ -168,7 +168,7 @@ with st.sidebar:
                 st.session_state.messages = [{"role": "system", "content": f"Agent initialized for {st.session_state.repo_owner}/{st.session_state.repo_name}."}]
 
     st.markdown("---")
-    st.caption("Tip: You can rebuild the index anytime after editing the repo owner and name.")
+    st.caption("Tip: You can rebuild the index anytime after editing owner and name of the repo.")
 
 
 # ---------- Chat history render ----------
