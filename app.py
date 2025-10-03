@@ -27,7 +27,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.caption("Chat with an agent grounded on a GitHub repository. In the sidebar, enter the **owner** and **repository name** to get started.  For example: `https://github.com/elastic/elasticsearch` (owner = `elastic`, repo = `elasticsearch`). Once initialized, ask your questions and have fun! 🎉")
+
 
 
 # ---------- Session state ----------
