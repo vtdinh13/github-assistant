@@ -21,7 +21,7 @@ st.markdown(
     <div style='font-size:16px; color: gray;'>
         Chat with an AI agent trained on a GitHub repository.  
         Enter the <b>owner</b> and <b>repository name</b> in the sidebar.  
-        Example: <code>https://github.com/elastic/elasticsearch</code>, so owner = `elastic` and repo = `elasticsearch`.
+        Example: <code>https://github.com/elastic/elasticsearch</code>, so <b>owner</b> = <code>elastic</code> and <b>name</b> = <code>elasticsearch</code>.
         Then ask your questions and have fun exploring 🎉 !
     </div>
     """,
