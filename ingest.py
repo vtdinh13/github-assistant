@@ -67,7 +67,7 @@ def sliding_window(seq, size, step):
     result = []
     for i in range(0, n, step):
         chunk = seq[i:i+size]
-        result.append({'start': i, 'chunk': chunk})
+        result.append({'start': i, 'content': chunk})
         if i + size >= n:
             break
 
@@ -91,7 +91,7 @@ def create_doc_embeddings(chunks:list):
     embeddings = []
 
     for d in tqdm(chunks):
-        v = embedding_model.encode(d['chunk'])
+        v = embedding_model.encode(d['content'])
         embeddings.append(v)
 
     return np.array(embeddings)
@@ -107,6 +107,7 @@ def text_embedding_search(query:str):
     query_embedding = embedding_model.encode(query)
     return v_index.search(query_embedding, num_results=5)
 
+
 def index_data(repo_owner, repo_name, filter=None, chunk=False, chunking_params=None):
     docs = read_repo_data(repo_owner, repo_name)
 
@@ -119,5 +120,6 @@ def index_data(repo_owner, repo_name, filter=None, chunk=False, chunking_params=
         docs = chunk_documents(docs, **chunking_params)
     
     vector_index = create_vector_index(docs)
+    
     return vector_index
     
