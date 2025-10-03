@@ -152,7 +152,7 @@ def _ui_stream_write(generator: Iterator[str] | AsyncIterator[str]) -> str:
 # ---------- Sidebar: initialization ----------
 with st.sidebar:
     st.header("⚙️ Setup")
-    st.session_state.repo_owner = st.text_input("Repo owner)", value=st.session_state.repo_owner)
+    st.session_state.repo_owner = st.text_input("Repo owner", value=st.session_state.repo_owner)
     st.session_state.repo_name = st.text_input("Repo name", value=st.session_state.repo_name)
     init_clicked = st.button("Initialize / Rebuild Index", type="primary", use_container_width=True)
 
