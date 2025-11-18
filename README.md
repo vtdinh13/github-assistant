@@ -1,84 +1,49 @@
-# Elastic Search AI Agent
-Creating an AI agent that can answer questions about any given GitHub repository can help users better understand the codebase as well as retrieve examples and best practices without the user having to do endless manual search. This repository aims to create an AI agent that can any question about the Elastic Search repository.
+# GitHub Assistant
+Chat with an AI agent that is grounded in any public GitHub repository. The app downloads the repo, indexes its Markdown content with embeddings, and uses a LLM agent to answer your questions with file references.
 
+## What it does
+- Downloads a GitHub repo ZIP (main branch) and extracts only `.md`/`.mdx` files (`ingest.py`).
+- Embeds content with `sentence-transformers` (`multi-qa-distilbert-cos-v1`) and builds a `minsearch` vector index.
+- Exposes a search tool to a PydanticAI agent (`gpt-4o-mini`) that cites GitHub file paths in responses (`search_agent.py`, `search_tools.py`).
+- Offers both a CLI chat loop (`main.py`) and a Streamlit UI (`app.py`).
+- Logs every interaction to JSON in `logs/` for review or evaluation (`logs.py`, `eval.py`).
 
-# Step 0 : Set up
-
-- Create virtual environment. I use conda.
-
+## Setup
+1) Create and activate a Python 3.11+ virtual environment. Example with `venv`:
 ```bash
-conda create --name ai-agent python=3.11
+python -m venv .venv
+source .venv/bin/activate
 ```
-
-- Create jupyter kernel and link it to the virtual environment of choice.
-
+2) Install dependencies:
 ```bash
-pip install ipykernel
-python -m ipykernel install --user --name ai-agent --display-name ai-agent
+pip install -r requirements.txt
 ```
-
-- Install requirements file
-
+3) Provide an API key for the chat model (OpenAI-compatible). For example:
 ```bash
-pip install requirements.txt
+export OPENAI_API_KEY=your_key_here
 ```
 
-- Install the `uv` package manager
-
+## Running the agent
+### CLI
+Start an interactive session targeting a GitHub repo:
 ```bash
-pip install uv
+python main.py --repo_owner elastic --repo_name elasticsearch
 ```
+Type questions; enter `stop` to exit. The script will download the repository, build the vector index, and answer using the search tool.
 
-- Initialize the `uv` package manager
+### Streamlit UI
+Launch the web app:
 ```bash
-uv init
+streamlit run app.py
 ```
+In the sidebar, set the repo owner and name (e.g., `elastic` / `elasticsearch`), click **Initialize / Rebuild Index**, then ask questions in the chat box.
 
-# Step 1 : Ingesting
+## How it works
+1) **Ingestion** – Downloads the repo ZIP from GitHub and parses Markdown/frontmatter into records.
+2) **Indexing** – Creates sentence-transformer embeddings and fits a `minsearch.VectorSearch` index (top‑5 results used by default).
+3) **Agent** – A PydanticAI agent calls the search tool before answering and injects GitHub blob links for cited files.
+4) **Logging** – All conversations are written to timestamped JSON files in `logs/` for auditing or evaluation.
 
-- Download and unzip a GitHub repository
-- Select `.md` and `.mdx` files only
-- You can download the Elastic Search repository either on the command line or in a Jupyter notebook, and the repository will be downloaded to your working directory.
-
-CLI: 
-
-```bash
-python3 ingest.py --repo_owner='elastic' --repo_name='elasticsearch'
-```
-
-Jupyter notebook:
-
-```python
-from ingest import read_repo_data
-read_repo_data(repo_owner='elastic', repo_name='elasticsearch')
-```
-
-# Step 2 : Processing
-
-- Processing methods vary based on dataset size:
-    - Simple overlapping chunks, paragraph and section splitting, token-based, or AI-powered splitting using some LLM
-    - Overlapping lexical split is one of the simplest methods and is often sufficient. It is recommended to try the simplest approach first before moving to a more complex method such as using a LLM.
-- A sliding window method, or overlapping between chucks, was used to create a list of chunks for this project. To implement the processing step:
-
-```python
-from chunking import create_chunks
-chunks_list = create_chunks(repo_docs)
-```
-
-# Step 3: Indexing
-
-- Indexing the data and putting it in a search engine help the agent quickly retrieve relevant data when the user asks a question.
-- Depending on the size of the data, there are three primary indexing methods:
-    - Lexical: the agent matches keywords in the query to data in the search engine
-    - Vector or semantic search: embeddings, or the numerical representation of text, are created from both the data and the question. Embeddings maintain semantic meaning, such that synonyms have similar embeddings while antonyms have dissimilar embeddings.
-    - In most cases, lexical search suffices for small datasets while vector search is more suitable for medium to large datasets. Because the Elastic Search repository is rather large, vector search was implemented. At this point, the premature agent is already ready to answer questions in the following way:
-    
-    ```python
-    from search import vector_search
-    
-    query = 'What is elastic search?'
-    vector_search(chunks_list, query)
-    ```
-    
-    The above results in the following JSON output:
-    ![](json-example-output.png)
+## Extras
+- **Chunking:** `ingest.index_data(..., chunk=True, chunking_params={...})` will split documents with a sliding window before indexing.
+- **Synthetic QA & eval:** `question_generation.py` can sample repo content to generate questions; `eval.py` scores logged responses against a checklist.
