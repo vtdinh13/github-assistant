@@ -41,7 +41,7 @@ In the sidebar, set the repo owner and name (e.g., `elastic` / `elasticsearch`),
 ## How it works
 1) **Ingestion** – Downloads the repo ZIP from GitHub and parses Markdown/frontmatter into records.
 2) **Indexing** – Creates sentence-transformer embeddings and fits a `minsearch.VectorSearch` index (top‑5 results used by default).
-3) **Agent** – A PydanticAI agent calls the search tool before answering and injects GitHub blob links for cited files.
+3) **Agent** – Built with PydanticAI's `Agent` class using OpenAI's `gpt-4o-mini`; it calls the search tool before answering and injects GitHub blob links for cited files.
 4) **Logging** – All conversations are written to timestamped JSON files in `logs/` for auditing or evaluation.
 
 ## Extras
