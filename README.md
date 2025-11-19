@@ -1,10 +1,12 @@
 # GitHub Assistant
-Chat with an AI agent that is grounded in any public GitHub repository. The app downloads the repo, indexes its Markdown content with embeddings, and uses a LLM agent to answer your questions with file references.
+
+
+Built to solve the challenge of navigating large codebases, this repo creates an AI agent that extracts knowledge directly from any given GitHub repo, making documentation instantly searchable and accessible. The codebase is designed to download the repo, index its Markdown content with embeddings, and use an LLM agent to answer your questions with file references.
 
 ## What it does
 - Downloads a GitHub repo ZIP (main branch) and extracts only `.md`/`.mdx` files (`ingest.py`).
 - Embeds content with `sentence-transformers` (`multi-qa-distilbert-cos-v1`) and builds a `minsearch` vector index.
-- Exposes a search tool to a PydanticAI agent (`gpt-4o-mini`) that cites GitHub file paths in responses (`search_agent.py`, `search_tools.py`).
+- Exposes a search tool to a PydanticAI's agent class (using `gpt-4o-mini`) that cites GitHub file paths in responses (`search_agent.py`, `search_tools.py`).
 - Offers both a CLI chat loop (`main.py`) and a Streamlit UI (`app.py`).
 - Logs every interaction to JSON in `logs/` for review or evaluation (`logs.py`, `eval.py`).
 
@@ -39,7 +41,7 @@ streamlit run app.py
 In the sidebar, set the repo owner and name (e.g., `elastic` / `elasticsearch`), click **Initialize / Rebuild Index**, then ask questions in the chat box.
 
 ## How it works
-1) **Ingestion** – Downloads the repo ZIP from GitHub and parses Markdown/frontmatter into records.
+1) **Ingestion** – Downloads the repo ZIP from GitHub and parses Markdown files using frontmatter into records.
 2) **Indexing** – Creates sentence-transformer embeddings and fits a `minsearch.VectorSearch` index (top‑5 results used by default).
 3) **Agent** – Built with PydanticAI's `Agent` class using OpenAI's `gpt-4o-mini`; it calls the search tool before answering and injects GitHub blob links for cited files.
 4) **Logging** – All conversations are written to timestamped JSON files in `logs/` for auditing or evaluation.
